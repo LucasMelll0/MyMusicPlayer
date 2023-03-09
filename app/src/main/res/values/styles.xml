@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DefaultCardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardElevation">@dimen/cardview_default_elevation</item>
+        <item name="cardCornerRadius">@dimen/default_radius</item>
+    </style>
+    <style name="TitleTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
+    </style>
+    <style name="SubTitleTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>
