@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageview_music_item"
+        android:layout_width="@dimen/music_image_size_mini"
+        android:layout_height="@dimen/music_image_size_mini"
+        style="@style/DefaultShapeableImageView"
+        tools:src="@tools:sample/backgrounds/scenic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/default_margin"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_title_music_item"
+        android:layout_width="0dp"
+        style="@style/InformationTextView"
+        app:layout_constraintStart_toEndOf="@id/imageview_music_item"
+        app:layout_constraintTop_toTopOf="@id/imageview_music_item"
+        tools:text="Jacó Segurou Um Anjo"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="@dimen/default_horizontal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_author_music_item"
+        android:layout_width="0dp"
+        style="@style/InformationTextView"
+        app:layout_constraintTop_toBottomOf="@id/textview_title_music_item"
+        app:layout_constraintStart_toStartOf="@id/textview_title_music_item"
+        app:layout_constraintEnd_toEndOf="@id/textview_title_music_item"
+        tools:text="Thales Roberto"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

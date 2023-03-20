@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient_light"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.musiclist.MusicListFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_music_list_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/music_item"
+        app:layout_constraintBottom_toTopOf="@id/_cardview_mini_player"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/_cardview_mini_player"
+        style="@style/DefaultCardView"
+        android:layout_margin="@dimen/default_margin"
+        app:cardBackgroundColor="@color/purple_50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageview_music_image_mini_player_list_fragment"
+                style="@style/DefaultShapeableImageView"
+                android:layout_width="@dimen/music_image_size_mini"
+                android:layout_height="@dimen/music_image_size_mini"
+                android:layout_margin="@dimen/default_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textview_music_title_mini_player_list_fragment"
+                android:layout_width="0dp"
+                style="@style/InformationTextView"
+                android:maxLines="1"
+                android:layout_marginHorizontal="@dimen/default_horizontal_margin"
+                app:layout_constraintEnd_toStartOf="@id/imagebutton_playpause_mini_player_list_fragment"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/imageview_music_image_mini_player_list_fragment"
+                app:layout_constraintTop_toTopOf="@id/imageview_music_image_mini_player_list_fragment"
+                tools:text="Pode Morar aqui" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview_music_artist_mini_player_list_fragment"
+                android:layout_width="0dp"
+                style="@style/InformationTextView"
+                app:layout_constraintEnd_toEndOf="@id/textview_music_title_mini_player_list_fragment"
+                app:layout_constraintStart_toStartOf="@id/textview_music_title_mini_player_list_fragment"
+                app:layout_constraintTop_toBottomOf="@id/textview_music_title_mini_player_list_fragment"
+                tools:text="Theo Rubia" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imagebutton_forward_mini_player_list_fragment"
+                style="@style/DefaultIconButton"
+                android:contentDescription="@string/forward_content_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/ic_forward"
+                android:layout_margin="16dp"/>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imagebutton_playpause_mini_player_list_fragment"
+                style="@style/DefaultIconButton"
+                android:contentDescription="@string/fab_play_pause_music_player_content_description"
+                app:layout_constraintEnd_toStartOf="@id/imagebutton_forward_mini_player_list_fragment"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/ic_play"
+                android:tint="@color/purple_900"/>
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progressbar_miniplayer_position"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:max="1000"
+                android:progress="500"
+                android:progressTint="@color/purple_800"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
