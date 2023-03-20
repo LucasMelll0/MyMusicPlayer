@@ -18,16 +18,18 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import coil.load
 import com.example.meplayermusic.MUSIC_URI_EXTRA
 import com.example.meplayermusic.PAUSE_ICON
 import com.example.meplayermusic.PLAY_ICON
 import com.example.meplayermusic.R
 import com.example.meplayermusic.databinding.FragmentPlayerBinding
+import com.example.meplayermusic.datasource.MusicDataSource
 import com.example.meplayermusic.extensions.findMusicMetaData
 import com.example.meplayermusic.extensions.requestPermission
+import com.example.meplayermusic.extensions.tryLoad
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.services.MediaPlayerService
+import com.google.android.material.slider.Slider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -113,6 +115,11 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.i("Test", "onStart: ${MusicDataSource.musicList}")
+    }
+
     private fun initMusicPlayerService(uri: Uri) {
         Intent(requireActivity(), MediaPlayerService::class.java).also { intent ->
             intent.putExtra(MUSIC_URI_EXTRA, uri.toString())
@@ -131,7 +138,7 @@ class PlayerFragment : Fragment() {
     private fun toggleFabPlayPause(icon: Int) {
         activity?.let {
             val fabPlayPause = binding.fabPlayPausePlayerFragment
-            fabPlayPause.setImageDrawable(
+            fabPlayPause.icon =
                 when (icon) {
                     PAUSE_ICON -> {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_pause, null)
@@ -143,7 +150,6 @@ class PlayerFragment : Fragment() {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_pause, null)
                     }
                 }
-            )
         }
     }
 
@@ -154,12 +160,12 @@ class PlayerFragment : Fragment() {
         val textViewAuthor = binding.textviewMusicAuthorPlayerFragment
         music.apply {
             image?.let {
-                imageViewMusic.load(it)
+                imageViewMusic.tryLoad(it)
             }
-            title?.let {
+            title.let {
                 textViewTitle.text = it
             }
-            author?.let {
+            artist.let {
                 textViewAuthor.text = it
             }
         }
@@ -186,14 +192,21 @@ class PlayerFragment : Fragment() {
     }
 
     private fun setsUpProgressBar() {
-        val progressBarMusic = binding.progressBarMusicPlayerFragment
+        val sliderMusic = binding.sliderMusicPlayerFragment
         if (mBound) {
             val player = mediaPlayerService.player
-            progressBarMusic.max = player.duration
+            sliderMusic.valueTo = player.duration.toFloat()
             lifecycleScope.launch {
+                launch {
+                    sliderMusic.addOnChangeListener(Slider.OnChangeListener { _, value, fromUser ->
+                        if (fromUser) {
+                            mediaPlayerService.player.seekTo(value.toInt())
+                        }
+                    })
+                }
                 withContext(Dispatchers.IO) {
-                    while (progressBarMusic.progress < progressBarMusic.max) {
-                        progressBarMusic.progress = player.currentPosition
+                    while (sliderMusic.value < sliderMusic.valueTo) {
+                        sliderMusic.value = player.currentPosition.toFloat()
                         Thread.sleep(200)
                     }
                 }
