@@ -43,8 +43,9 @@
         android:id="@+id/textview_music_title_player_fragment"
         style="@style/TitleTextView"
         android:textColor="@color/purple_50"
-        app:layout_constraintEnd_toEndOf="@id/_cardview_music_image"
-        app:layout_constraintStart_toStartOf="@id/_cardview_music_image"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/_cardview_music_image"
         tools:text="Só tu és Santo" />
 
