@@ -1,4 +1,4 @@
-package com.example.meplayermusic.ui
+package com.example.meplayermusic.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.meplayermusic.R
 import com.example.meplayermusic.databinding.FragmentMusicListBinding
+import com.example.meplayermusic.extensions.goTo
 import com.example.meplayermusic.extensions.isPlaying
 import com.example.meplayermusic.extensions.toMusic
 import com.example.meplayermusic.extensions.tryLoad
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Status
 import com.example.meplayermusic.ui.musiclist.recyclerview.MusicAdapter
-import com.example.meplayermusic.ui.musiclist.viewmodel.MusicListViewModel
+import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,7 +28,7 @@ class MusicListFragment : Fragment() {
     private var _binding: FragmentMusicListBinding? = null
     private val binding get() = _binding!!
     private val adapter: MusicAdapter by inject()
-    private val viewModel: MusicListViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel()
     private var currentMusic: Music? = null
     private var playbackState: PlaybackStateCompat? = null
 
@@ -42,6 +43,14 @@ class MusicListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setsUpRecyclerView()
+        setsUpNavigationToPlayerFragment()
+    }
+
+    private fun setsUpNavigationToPlayerFragment() {
+        val textViewMusicTitle = binding.textviewMusicTitleMiniPlayerListFragment
+        textViewMusicTitle.setOnClickListener {
+            goTo(R.id.action_musicListFragment_to_PlayerFragment)
+        }
     }
 
     private fun setsUpRecyclerView() {
@@ -62,7 +71,9 @@ class MusicListFragment : Fragment() {
         buttonPlayPause.setOnClickListener {
             currentMusic?.let { music ->
                 Log.d("Tests", "setsUpTransportControllers: $music")
-                viewModel.playOrToggleMusic(music, true)
+                if (music.uri.isNotEmpty()) {
+                    viewModel.playOrToggleMusic(music, true)
+                }
             }
         }
         buttonForward.setOnClickListener {

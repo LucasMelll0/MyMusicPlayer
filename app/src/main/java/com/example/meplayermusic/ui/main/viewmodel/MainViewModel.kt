@@ -1,4 +1,4 @@
-package com.example.meplayermusic.ui.musiclist.viewmodel
+package com.example.meplayermusic.ui.main.viewmodel
 
 import android.support.v4.media.MediaBrowserCompat
 import androidx.lifecycle.LiveData
@@ -17,7 +17,7 @@ import com.example.meplayermusic.services.exoplayer.callbacks.MusicServiceConnec
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MusicListViewModel(
+class MainViewModel(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
 
@@ -55,10 +55,10 @@ class MusicListViewModel(
                     _mediaItems.postValue(Resource.success(items))
                 }
             })
-        updateCurrentlyMusicDuration()
+        updateCurrentlyMusicPosition()
     }
 
-    private fun updateCurrentlyMusicDuration() {
+    private fun updateCurrentlyMusicPosition() {
         viewModelScope.launch {
             while (true) {
                 val currentlyPosition = playbackState.value?.currentPlaybackPosition

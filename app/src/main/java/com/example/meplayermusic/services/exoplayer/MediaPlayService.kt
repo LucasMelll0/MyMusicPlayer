@@ -7,7 +7,6 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.example.meplayermusic.datasource.MusicDataSource
 import com.example.meplayermusic.services.exoplayer.callbacks.MediaPlayerEventListener
@@ -124,6 +123,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     ) {
         val currentMusicIndex = currentPlayingMusic?.let { musicList.indexOf(musicToPlay) } ?: 0
         exoPlayer.setMediaSource(MusicDataSource.asMediaSource(dataSourceFactory))
+        exoPlayer.prepare()
         exoPlayer.seekTo(currentMusicIndex, 0L)
         exoPlayer.playWhenReady = play
     }

@@ -2,8 +2,8 @@ package com.example.meplayermusic.di
 
 import com.example.meplayermusic.services.exoplayer.callbacks.MusicServiceConnection
 import com.example.meplayermusic.ui.musiclist.recyclerview.MusicAdapter
-import com.example.meplayermusic.ui.musiclist.viewmodel.MusicListViewModel
-import com.example.meplayermusic.ui.player.PlayerViewModel
+import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
+import com.example.meplayermusic.ui.player.viewmodel.PlayerViewModel
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
@@ -14,11 +14,11 @@ import org.koin.dsl.module
 
 val playerModule = module {
     viewModel {
-        PlayerViewModel()
+        PlayerViewModel(get())
     }
 
     viewModel {
-        MusicListViewModel(get())
+        MainViewModel(get())
     }
 
     single {

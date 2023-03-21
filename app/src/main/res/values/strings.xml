@@ -5,10 +5,10 @@
     <string name="title_player_fragment">Player Fragment</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fragment_player_slider_description">Slider for music time</string>
-    <string name="repeat_content_description">Repeat Button</string>
-    <string name="rewind_content_description">Rewind Button</string>
-    <string name="forward_content_description">Forward button</string>
-    <string name="shufle_content_description">Shufle button</string>
+    <string name="repeat_content_description">Repeat</string>
+    <string name="rewind_content_description">Rewind</string>
+    <string name="forward_content_description">Forward</string>
+    <string name="shufle_content_description">Shufl</string>
     <string name="music_service_suspended_connection">An error has been occurred!</string>
     <string name="media_player_notification_channel_name">My Player Music</string>
     <string name="media_player_notification_channel_description">Player of Music</string>

@@ -3,23 +3,19 @@ package com.example.meplayermusic.extensions
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.meplayermusic.model.Music
 
-fun Fragment.requestPermission(permission: String, onGranted: () -> Unit) {
-    registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            onGranted()
-        } else {
-            context?.let {
-                Toast.makeText(it, "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }.launch(permission)
+fun Fragment.goBack() {
+    context?.let {
+        findNavController().popBackStack()
+    }
+}
+fun Fragment.goTo(destination: Int) {
+    context?.let {
+        findNavController().safeNavigate(destination)
+    }
 }
 
 fun Fragment.findMusicMetaData(uri: Uri): Music? {
