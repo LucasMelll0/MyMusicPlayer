@@ -66,6 +66,7 @@
                 android:id="@+id/imagebutton_forward_mini_player_list_fragment"
                 style="@style/DefaultIconButton"
                 android:contentDescription="@string/forward_content_description"
+                app:tint="@color/purple_900"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
