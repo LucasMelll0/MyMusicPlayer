@@ -47,7 +47,7 @@
         tools:text="Só tu és Santo" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textview_music_author_player_fragment"
+        android:id="@+id/textview_music_artist_player_fragment"
         style="@style/SubTitleTextView"
         app:layout_constraintEnd_toEndOf="@id/textview_music_title_player_fragment"
         app:layout_constraintStart_toStartOf="@id/textview_music_title_player_fragment"
@@ -63,11 +63,24 @@
         app:layout_constraintBottom_toTopOf="@id/fab_play_pause_player_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_music_author_player_fragment"
+        app:layout_constraintTop_toBottomOf="@id/textview_music_artist_player_fragment"
         app:layout_constraintVertical_bias="0.7"
+        android:valueFrom="0"
         app:thumbColor="@color/purple_600"
         app:trackColor="@color/purple_100"
         app:trackColorActive="@color/purple_400" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textview_music_position_player_fragment"
+        style="@style/InformationTextView"
+        app:layout_constraintTop_toBottomOf="@id/slider_music_player_fragment"
+        app:layout_constraintStart_toStartOf="@id/slider_music_player_fragment"
+        tools:text="00:00"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textview_music_duration_player_fragment"
+        style="@style/InformationTextView"
+        app:layout_constraintTop_toBottomOf="@id/slider_music_player_fragment"
+        app:layout_constraintEnd_toEndOf="@id/slider_music_player_fragment"
+        tools:text="04:32"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_play_pause_player_fragment"
@@ -79,7 +92,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_music_author_player_fragment"
+        app:layout_constraintTop_toBottomOf="@id/textview_music_artist_player_fragment"
         app:layout_constraintVertical_bias="0.8" />
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -118,7 +131,7 @@
         app:srcCompat="@drawable/ic_forward" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imagebutton_shufle_player_fragment"
+        android:id="@+id/imagebutton_shuffle_player_fragment"
         style="@style/DefaultIconButton"
         android:contentDescription="@string/shufle_content_description"
         app:layout_constraintBottom_toBottomOf="@id/imagebutton_forward_player_fragment"
