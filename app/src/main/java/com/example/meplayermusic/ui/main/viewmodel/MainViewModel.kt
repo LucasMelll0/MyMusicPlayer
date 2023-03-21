@@ -1,6 +1,7 @@
 package com.example.meplayermusic.ui.main.viewmodel
 
 import android.support.v4.media.MediaBrowserCompat
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -77,6 +78,13 @@ class MainViewModel(
 
     fun playOrToggleMusic(music: Music, toggle: Boolean = false) {
         val isPrepared = playbackState.value?.isPrepared ?: false
+        Log.d("Tests", "playOrToggleMusic: ${music.id}")
+        if (music.id.trim().isEmpty()) {
+            mediaItems.value?.data?.get(0)?.id?.let {
+                musicServiceConnection.transportControls.playFromMediaId(it, null)
+                return
+            }
+        }
         if (isPrepared && music.id == currentPlayingMusic.value?.description?.mediaId) {
             playbackState.value?.let { state ->
                 when {

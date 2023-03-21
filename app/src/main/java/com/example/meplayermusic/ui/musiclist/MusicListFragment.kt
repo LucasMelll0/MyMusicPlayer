@@ -71,9 +71,7 @@ class MusicListFragment : Fragment() {
         buttonPlayPause.setOnClickListener {
             currentMusic?.let { music ->
                 Log.d("Tests", "setsUpTransportControllers: $music")
-                if (music.uri.isNotEmpty()) {
                     viewModel.playOrToggleMusic(music, true)
-                }
             }
         }
         buttonForward.setOnClickListener {
@@ -108,7 +106,9 @@ class MusicListFragment : Fragment() {
             it?.let {
                 currentMusic = it.toMusic()
                 currentMusic?.let {
-                    updateCurrentlyMusic(currentMusic!!)
+                    if (currentMusic!!.id.isNotEmpty()) {
+                        updateCurrentlyMusic(currentMusic!!)
+                    }
                 }
             }
         }
