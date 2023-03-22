@@ -8,6 +8,7 @@
     tools:context=".ui.player.PlayerFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_player_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

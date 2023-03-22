@@ -11,10 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.meplayermusic.R
 import com.example.meplayermusic.databinding.FragmentPlayerBinding
-import com.example.meplayermusic.extensions.isPlaying
-import com.example.meplayermusic.extensions.toMinutesAndSeconds
-import com.example.meplayermusic.extensions.toMusic
-import com.example.meplayermusic.extensions.tryLoad
+import com.example.meplayermusic.extensions.*
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import com.example.meplayermusic.ui.player.viewmodel.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,9 +44,17 @@ class PlayerFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        setsUpToolbarNavigationButton()
         setsUpObservers()
         setsUpSliderOnChangeListener()
         setsUpPlayerButtons()
+    }
+
+    private fun setsUpToolbarNavigationButton() {
+        val toolbar = binding.toolbarPlayerFragment
+        toolbar.setNavigationOnClickListener {
+            goTo(R.id.action_PlayerFragment_to_musicListFragment)
+        }
     }
 
     private fun setsUpPlayerButtons() {
