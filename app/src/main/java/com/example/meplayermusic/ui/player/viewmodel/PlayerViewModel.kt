@@ -24,13 +24,20 @@ class PlayerViewModel(
 
     fun play() {
         val isPrepared = playbackState.value?.isPrepared ?: false
-        if (isPrepared && currentPlayingMusic.value != null){
+        if (isPrepared && currentPlayingMusic.value != null) {
             playbackState.value?.let { state ->
                 when {
                     state.isPlaying -> musicServiceConnection.transportControls.pause()
                     state.isPlayEnabled -> musicServiceConnection.transportControls.play()
                     else -> Unit
                 }
+            }
+        } else {
+            currentPlayingMusic.value?.let {
+                musicServiceConnection.transportControls.playFromMediaId(
+                    it.description.mediaId,
+                    null
+                )
             }
         }
     }
