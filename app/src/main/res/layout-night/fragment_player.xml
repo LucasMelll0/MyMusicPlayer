@@ -108,7 +108,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/imagebutton_rewind_player_fragment"
         app:srcCompat="@drawable/ic_repeat"
-        app:tint="@color/purple_50" />
+        />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imagebutton_rewind_player_fragment"
@@ -121,7 +121,7 @@
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/fab_play_pause_player_fragment"
-        app:srcCompat="@drawable/ic_rewind" />
+        app:srcCompat="@drawable/ic_skip_previous" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imagebutton_forward_player_fragment"
@@ -132,7 +132,7 @@
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toEndOf="@id/fab_play_pause_player_fragment"
         app:layout_constraintTop_toTopOf="@id/fab_play_pause_player_fragment"
-        app:srcCompat="@drawable/ic_forward" />
+        app:srcCompat="@drawable/ic_skip_next" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imagebutton_shuffle_player_fragment"
@@ -142,7 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imagebutton_forward_player_fragment"
         app:layout_constraintTop_toTopOf="@id/imagebutton_forward_player_fragment"
-        app:srcCompat="@drawable/ic_shufle"
-        app:tint="@color/purple_50" />
+        app:srcCompat="@drawable/ic_shuffle"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

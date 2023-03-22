@@ -23,7 +23,7 @@
         style="@style/DefaultCardView"
         android:layout_width="@dimen/music_image_size_main_player"
         android:layout_height="@dimen/music_image_size_main_player"
-        app:cardBackgroundColor="@color/purple_600"
+        app:cardBackgroundColor="@color/purple_900"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/_guideline"
         app:layout_constraintTop_toBottomOf="@id/textview_music_artist_player_fragment"
-        app:thumbColor="@color/purple_600"
+        app:thumbColor="@color/purple_900"
         app:trackColor="@color/purple_100"
         app:trackColorActive="@color/purple_400" />
     <com.google.android.material.textview.MaterialTextView
@@ -101,7 +101,7 @@
         app:layout_constraintStart_toEndOf="@id/_guideline"
         app:layout_constraintTop_toTopOf="@id/imagebutton_rewind_player_fragment"
         app:srcCompat="@drawable/ic_repeat"
-        app:tint="@color/purple_200" />
+        />
     <androidx.appcompat.widget.AppCompatImageButton
 
         android:id="@+id/imagebutton_rewind_player_fragment"
@@ -114,12 +114,12 @@
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toEndOf="@id/imagebutton_repeat_player_fragment"
         app:layout_constraintTop_toTopOf="@id/fab_play_pause_player_fragment"
-        app:srcCompat="@drawable/ic_rewind" />
+        app:srcCompat="@drawable/ic_skip_previous" />
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_play_pause_player_fragment"
         style="@style/WrapWrap"
         android:contentDescription="@string/fab_play_pause_music_player_content_description"
-        app:backgroundTint="@color/purple_600"
+        app:backgroundTint="@color/purple_900"
         app:icon="@drawable/ic_play"
         app:iconTint="@color/purple_50"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -137,7 +137,7 @@
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toEndOf="@id/fab_play_pause_player_fragment"
         app:layout_constraintTop_toTopOf="@id/fab_play_pause_player_fragment"
-        app:srcCompat="@drawable/ic_forward" />
+        app:srcCompat="@drawable/ic_skip_next" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imagebutton_shuffle_player_fragment"
@@ -147,7 +147,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imagebutton_forward_player_fragment"
         app:layout_constraintTop_toTopOf="@id/imagebutton_forward_player_fragment"
-        app:srcCompat="@drawable/ic_shufle"
-        app:tint="@color/purple_200" />
+        app:srcCompat="@drawable/ic_shuffle"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

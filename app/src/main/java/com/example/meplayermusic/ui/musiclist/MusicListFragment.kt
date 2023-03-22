@@ -91,6 +91,8 @@ class MusicListFragment : Fragment() {
                         result.data?.let { musicList ->
                             adapter.submitList(musicList)
                             if (musicList.isNotEmpty()) {
+                                Log.d("Tests", "first Music Album Image: ${musicList[0].image}")
+                                Log.d("Tests", "Current Music Image: ${currentMusic?.image}")
                                 val imageViewMiniPlayer =
                                     binding.imageviewMusicImageMiniPlayerListFragment
                                 imageViewMiniPlayer.load((currentMusic ?: musicList[0]).image)

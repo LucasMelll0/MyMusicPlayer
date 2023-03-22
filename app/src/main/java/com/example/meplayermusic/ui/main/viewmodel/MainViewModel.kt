@@ -47,7 +47,7 @@ class MainViewModel(
                     val items = children.map {
                         Music(
                             id = it.mediaId!!,
-                            image = it.description.iconBitmap,
+                            image = it.description.iconUri,
                             title = it.description.title.toString(),
                             artist = it.description.subtitle.toString(),
                             uri = it.description.mediaUri.toString()

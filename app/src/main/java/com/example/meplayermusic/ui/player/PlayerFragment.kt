@@ -3,6 +3,7 @@ package com.example.meplayermusic.ui.player
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,12 +92,16 @@ class PlayerFragment : Fragment() {
         }
         mainViewModel.currentMusicDuration.observe(this) {
             it?.let {
-                updateCurrentDuration(it)
+                if (it > 0) {
+                    updateCurrentDuration(it)
+                }
             }
         }
         mainViewModel.currentMusicPosition.observe(this) {
             it?.let {
-                updateCurrentPosition(it)
+                if (it > 0) {
+                    updateCurrentPosition(it)
+                }
             }
         }
         playerViewModel.playbackState.observe(this) {
@@ -106,10 +111,12 @@ class PlayerFragment : Fragment() {
         }
         playerViewModel.shuffleMode.observe(this) {
             setsUpShuffleButtonIcon(it)
+            Log.d("Tests", "Shuffle: $it")
         }
 
         playerViewModel.repeatMode.observe(this) {
             setsUpRepeatButtonIcon(it)
+            Log.d("Tests", "Repeat: $it")
         }
 
     }
@@ -123,34 +130,12 @@ class PlayerFragment : Fragment() {
 
     private fun setsUpRepeatButtonIcon(enabled: Boolean) {
         val buttonRepeat = binding.imagebuttonRepeatPlayerFragment
-        buttonRepeat.setImageDrawable(
-            if (enabled)
-                ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.ic_repeat_enabled,
-                    null
-                ) else ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.ic_repeat,
-                null
-            )
-        )
+        buttonRepeat.setImageResource(if (enabled) R.drawable.ic_repeat_enabled else R.drawable.ic_repeat)
     }
 
     private fun setsUpShuffleButtonIcon(enabled: Boolean) {
         val buttonShuffle = binding.imagebuttonShufflePlayerFragment
-        buttonShuffle.setImageDrawable(
-            if (enabled)
-                ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.ic_shuffle_enabled,
-                    null
-                ) else ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.ic_shufle,
-                null
-            )
-        )
+        buttonShuffle.setImageResource(if (enabled) R.drawable.ic_shuffle_enabled else R.drawable.ic_shuffle)
     }
 
     private fun updateButtonPlayPause(it: PlaybackStateCompat) {
