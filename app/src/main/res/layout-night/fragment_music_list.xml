@@ -90,7 +90,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:max="1000"
                 tools:progress="500"
-                android:progressTint="@color/purple_400"/>
+                app:indicatorColor="@color/purple_50"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

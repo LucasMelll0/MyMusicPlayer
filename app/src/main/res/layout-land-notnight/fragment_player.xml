@@ -77,8 +77,7 @@
         app:layout_constraintStart_toEndOf="@id/_guideline"
         app:layout_constraintTop_toBottomOf="@id/textview_music_artist_player_fragment"
         app:thumbColor="@color/purple_900"
-        app:trackColor="@color/purple_100"
-        app:trackColorActive="@color/purple_400" />
+        app:trackColorActive="@color/purple_900" />
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textview_music_position_player_fragment"
         style="@style/InformationTextView"
