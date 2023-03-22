@@ -1,6 +1,7 @@
 package com.example.meplayermusic.services.exoplayer
 
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
@@ -44,7 +45,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
         super.onCreate()
         MusicDataSource.fetchMediaData(this@MediaPlayService)
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
-            PendingIntent.getActivity(this, 0, it, 0)
+            PendingIntent.getActivity(this, 0, it, FLAG_IMMUTABLE)
         }
         mediaSession = MediaSessionCompat(baseContext, LOG_TAG).apply {
             setSessionActivity(activityIntent)
