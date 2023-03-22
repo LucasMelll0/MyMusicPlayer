@@ -1,5 +1,6 @@
 package com.example.meplayermusic.datasource
 
+import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
@@ -31,8 +32,7 @@ class MusicDataSource {
                     .putString(METADATA_KEY_TITLE, music.title)
                     .putString(METADATA_KEY_DISPLAY_SUBTITLE, music.artist)
                     .putString(METADATA_KEY_DISPLAY_TITLE, music.title)
-                    .putBitmap(METADATA_KEY_ALBUM_ART, music.image)
-                    .putBitmap(METADATA_KEY_DISPLAY_ICON, music.image)
+                    .putString(METADATA_KEY_ALBUM_ART_URI, music.image.toString())
                     .putString(METADATA_KEY_MEDIA_URI, music.uri)
                     .putString(METADATA_KEY_DISPLAY_DESCRIPTION, music.artist)
                     .build()
@@ -46,7 +46,8 @@ class MusicDataSource {
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.DURATION
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.ALBUM_ID
             )
 
             val selection = "${MediaStore.Audio.Media.MIME_TYPE} = ?"
@@ -67,6 +68,8 @@ class MusicDataSource {
                 val nameColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
                 val artistColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
                 val durationColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                val albumIdColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+
 
                 while (it.moveToNext()) {
                     val fullPath = it.getString(fullPathColumn)
@@ -74,17 +77,24 @@ class MusicDataSource {
                     val artist = it.getString(artistColumn)
                     val duration = it.getInt(durationColumn)
                     val uri = Uri.parse(fullPath)
+                    val albumId = it.getLong(albumIdColumn)
+                    val albumImage = getAlbumImage(albumId)
                     val music = Music(
-                        image = null,
+                        image = albumImage,
                         title = name,
                         artist = artist,
                         duration = duration,
-                        uri = uri.toString()
+                        uri = uri.toString(),
                     )
                     musicList.add(music)
                 }
             }
             return musicList
+        }
+
+        private fun getAlbumImage(albumId: Long): Uri {
+            val sImage = Uri.parse("content://media/external/audio/albumart")
+            return ContentUris.withAppendedId(sImage, albumId)
         }
 
         fun asMediaItems() = musicMetadataList.map { music ->

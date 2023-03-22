@@ -1,11 +1,11 @@
 package com.example.meplayermusic.model
 
-import android.graphics.Bitmap
+import android.net.Uri
 import java.util.*
 
 data class Music(
     val id: String = UUID.randomUUID().toString(),
-    var image: Bitmap? = null,
+    var image: Uri? = null,
     val title: String = "",
     val artist: String = "",
     val duration: Int = 0,
