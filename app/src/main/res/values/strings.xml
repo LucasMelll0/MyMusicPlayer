@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyPlayerMusic</string>
+    <string name="app_name">MyMusicPlayer</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="fab_play_pause_music_player_content_description">Play/Pause Music player</string>
     <string name="title_player_fragment">Player Fragment</string>
