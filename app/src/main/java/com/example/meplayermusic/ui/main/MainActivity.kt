@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun progressBarVisibility(visibility: Visibility) {
         val progressBar = binding.progressbarMainActivity
-        progressBar.visibility = when(visibility) {
+        progressBar.visibility = when (visibility) {
             Visibility.VISIBLE -> View.VISIBLE
             Visibility.GONE -> View.GONE
             Visibility.INVISIBLE -> View.INVISIBLE
