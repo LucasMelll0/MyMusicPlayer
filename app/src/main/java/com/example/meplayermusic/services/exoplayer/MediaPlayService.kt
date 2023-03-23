@@ -43,7 +43,6 @@ class MediaPlayService : MediaBrowserServiceCompat() {
 
     override fun onCreate() {
         super.onCreate()
-        MusicDataSource.fetchMediaData(this@MediaPlayService)
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
             PendingIntent.getActivity(this, 0, it, FLAG_IMMUTABLE)
         }

@@ -9,12 +9,7 @@
         android:id="@+id/PlayerFragment"
         android:name="com.example.meplayermusic.ui.player.PlayerFragment"
         android:label="@string/title_player_fragment"
-        tools:layout="@layout/fragment_player">
-        <action
-            android:id="@+id/action_PlayerFragment_to_musicListFragment"
-            app:destination="@id/musicListFragment"
-            />
-    </fragment>
+        tools:layout="@layout/fragment_player"/>
     <fragment
         android:id="@+id/musicListFragment"
         android:name="com.example.meplayermusic.ui.musiclist.MusicListFragment"

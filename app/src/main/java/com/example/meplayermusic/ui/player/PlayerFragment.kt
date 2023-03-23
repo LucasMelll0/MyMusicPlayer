@@ -53,7 +53,7 @@ class PlayerFragment : Fragment() {
     private fun setsUpToolbarNavigationButton() {
         val toolbar = binding.toolbarPlayerFragment
         toolbar.setNavigationOnClickListener {
-            goTo(R.id.action_PlayerFragment_to_musicListFragment)
+            goBack()
         }
     }
 

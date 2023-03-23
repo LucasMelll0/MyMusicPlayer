@@ -13,4 +13,5 @@
     <string name="media_player_notification_channel_name">My Player Music</string>
     <string name="media_player_notification_channel_description">Player of Music</string>
     <string name="on_player_error_message">An unknown error occurred!</string>
+    <string name="read_storage_permission_denied_message">Permission to read storage is denied</string>
 </resources>
