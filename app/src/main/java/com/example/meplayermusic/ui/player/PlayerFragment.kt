@@ -104,9 +104,7 @@ class PlayerFragment : Fragment() {
         }
         mainViewModel.currentMusicPosition.observe(this) {
             it?.let {
-                if (it > 0) {
                     updateCurrentPosition(it)
-                }
             }
         }
         playerViewModel.playbackState.observe(this) {
@@ -157,11 +155,13 @@ class PlayerFragment : Fragment() {
             )
     }
 
-    private fun updateCurrentPosition(it: Long) {
+    private fun updateCurrentPosition(position: Long) {
         val textViewMusicPosition = binding.textviewMusicPositionPlayerFragment
         val sliderMusicPosition = binding.sliderMusicPlayerFragment
-        sliderMusicPosition.value = it.toFloat()
-        textViewMusicPosition.text = it.toMinutesAndSeconds()
+        if(position.toFloat() in sliderMusicPosition.valueFrom..sliderMusicPosition.valueTo) {
+            sliderMusicPosition.value = position.toFloat()
+            textViewMusicPosition.text = position.toMinutesAndSeconds()
+        }
 
     }
 
