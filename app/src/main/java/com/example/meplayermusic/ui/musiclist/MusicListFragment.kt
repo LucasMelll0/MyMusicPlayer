@@ -157,6 +157,7 @@ class MusicListFragment : Fragment() {
         music.apply {
             imageViewMusic.tryLoad(image)
             textViewTitle.text = title
+            textViewTitle.isSelected = true
             textViewArtist.text = artist
         }
     }

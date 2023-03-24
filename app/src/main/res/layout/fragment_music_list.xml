@@ -42,11 +42,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_music_title_mini_player_list_fragment"
                 android:layout_width="0dp"
                 style="@style/InformationTextView"
-                android:maxLines="1"
+                android:singleLine="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:layout_marginHorizontal="@dimen/default_horizontal_margin"
                 app:layout_constraintEnd_toStartOf="@id/imagebutton_playpause_mini_player_list_fragment"
                 android:textStyle="bold"
