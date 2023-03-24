@@ -78,15 +78,17 @@ class MusicDataSource {
                     val duration = it.getInt(durationColumn)
                     val uri = Uri.parse(fullPath)
                     val albumId = it.getLong(albumIdColumn)
-                    val albumImage = getAlbumImage(albumId)
-                    val music = Music(
-                        image = albumImage,
-                        title = name,
-                        artist = artist,
-                        duration = duration,
-                        uri = uri.toString(),
-                    )
-                    musicList.add(music)
+                    if (!name.startsWith("AUD")) {
+                        val albumImage = getAlbumImage(albumId)
+                        val music = Music(
+                            image = albumImage,
+                            title = name,
+                            artist = artist,
+                            duration = duration,
+                            uri = uri.toString(),
+                        )
+                        musicList.add(music)
+                    }
                 }
             }
             return musicList
