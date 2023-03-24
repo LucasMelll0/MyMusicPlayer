@@ -13,6 +13,7 @@
         <item name="android:statusBarColor">@color/purple_100</item>
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/baloo_bhai_2</item>
     </style>
 
     <style name="Theme.MePlayerMusic.NoActionBar">
