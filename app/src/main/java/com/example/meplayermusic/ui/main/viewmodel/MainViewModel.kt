@@ -98,6 +98,12 @@ class MainViewModel(
         }
     }
 
+    fun searchByName(query: String): List<Music> =
+        mediaItems.value?.data?.filter { music ->
+            music.title.contains(query, true)
+        } ?: emptyList()
+
+
     override fun onCleared() {
         super.onCleared()
         musicServiceConnection.unsubscribe(

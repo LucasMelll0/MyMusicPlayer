@@ -7,6 +7,14 @@
     android:background="@drawable/background_gradient_light"
     android:fitsSystemWindows="true"
     tools:context=".ui.musiclist.MusicListFragment">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_music_list_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/app_name"
+        app:titleCentered="true"
+        app:titleTextColor="@color/purple_900"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_music_list_fragment"
@@ -14,9 +22,9 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/_cardview_mini_player"
         tools:listitem="@layout/music_item"
-        app:layout_constraintBottom_toTopOf="@id/_cardview_mini_player"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar_music_list_fragment"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/_cardview_mini_player"
@@ -25,7 +33,8 @@
         app:cardBackgroundColor="@color/purple_50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

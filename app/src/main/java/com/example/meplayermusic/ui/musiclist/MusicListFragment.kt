@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -46,6 +47,41 @@ class MusicListFragment : Fragment() {
         setsUpNavigationToPlayerFragment()
     }
 
+    private fun setsUpToolbar() {
+        val toolbar = binding.toolbarMusicListFragment
+        toolbar.inflateMenu(R.menu.menu_music_list_fragment)
+        toolbar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.searchview_menu_music_list_fragment -> {
+                    setsUpSearchView(it.actionView as? SearchView)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun setsUpSearchView(searchView: SearchView?) {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    val filteredList = viewModel.searchByName(it)
+                    adapter.submitList(filteredList)
+
+                } ?: setsUpMediaItemsObserver()
+                return false
+            }
+        })
+        searchView?.setOnCloseListener {
+            setsUpMediaItemsObserver()
+            false
+        }
+    }
+
     private fun setsUpNavigationToPlayerFragment() {
         val textViewMusicTitle = binding.textviewMusicTitleMiniPlayerListFragment
         textViewMusicTitle.setOnClickListener {
@@ -63,6 +99,7 @@ class MusicListFragment : Fragment() {
         super.onStart()
         setsUpTransportControllers()
         setsUpObservers()
+        setsUpToolbar()
     }
 
     private fun setsUpTransportControllers() {
@@ -84,26 +121,7 @@ class MusicListFragment : Fragment() {
     }
 
     private fun setsUpObservers() {
-        viewModel.mediaItems.observe(this) {
-            it?.let { result ->
-                when (result.status) {
-                    Status.SUCCESS -> {
-                        result.data?.let { musicList ->
-                            adapter.submitList(musicList)
-                            if (musicList.isNotEmpty()) {
-                                Log.d("Tests", "first Music Album Image: ${musicList[0].image}")
-                                Log.d("Tests", "Current Music Image: ${currentMusic?.image}")
-                                val imageViewMiniPlayer =
-                                    binding.imageviewMusicImageMiniPlayerListFragment
-                                imageViewMiniPlayer.load((currentMusic ?: musicList[0]).image)
-                            }
-                        }
-                    }
-                    Status.ERROR -> Unit
-                    Status.LOADING -> Unit
-                }
-            }
-        }
+        setsUpMediaItemsObserver()
         viewModel.currentPlayingMusic.observe(this) {
             it?.let {
                 currentMusic = it.toMusic()
@@ -121,6 +139,30 @@ class MusicListFragment : Fragment() {
             }
         }
         updateProgressBar()
+    }
+
+    private fun setsUpMediaItemsObserver() {
+        if (viewModel.mediaItems.hasObservers()) {
+            viewModel.mediaItems.removeObservers(this)
+        }
+        viewModel.mediaItems.observe(this) {
+            it?.let { result ->
+                when (result.status) {
+                    Status.SUCCESS -> {
+                        result.data?.let { musicList ->
+                            adapter.submitList(musicList)
+                            if (musicList.isNotEmpty()) {
+                                val imageViewMiniPlayer =
+                                    binding.imageviewMusicImageMiniPlayerListFragment
+                                imageViewMiniPlayer.load((currentMusic ?: musicList[0]).image)
+                            }
+                        }
+                    }
+                    Status.ERROR -> Unit
+                    Status.LOADING -> Unit
+                }
+            }
+        }
     }
 
     private fun updateProgressBar() {
