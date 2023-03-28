@@ -7,7 +7,7 @@ fun MediaMetadataCompat.toMusic(): Music? {
     return description?.let {
         Music(
             id = it.mediaId ?: "",
-            image = it.iconUri,
+            image = it.iconUri.toString(),
             title = it.title.toString(),
             artist = it.subtitle.toString(),
             uri = it.mediaUri.toString()

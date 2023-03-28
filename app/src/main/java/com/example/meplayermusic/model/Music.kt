@@ -1,11 +1,14 @@
 package com.example.meplayermusic.model
 
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
-
+@Entity
 data class Music(
+    @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
-    var image: Uri? = null,
+    var image: String? = Uri.EMPTY.toString(),
     val title: String = "",
     val artist: String = "",
     val duration: Int = 0,

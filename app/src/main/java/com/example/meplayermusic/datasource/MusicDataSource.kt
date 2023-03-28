@@ -79,7 +79,7 @@ class MusicDataSource {
                     val uri = Uri.parse(fullPath)
                     val albumId = it.getLong(albumIdColumn)
                     if (!name.startsWith("AUD")) {
-                        val albumImage = getAlbumImage(albumId)
+                        val albumImage = getAlbumImage(albumId).toString()
                         val music = Music(
                             image = albumImage,
                             title = name,
