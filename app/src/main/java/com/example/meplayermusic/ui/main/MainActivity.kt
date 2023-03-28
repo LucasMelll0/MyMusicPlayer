@@ -3,7 +3,6 @@ package com.example.meplayermusic.ui.main
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -44,11 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun progressBarVisibility(visibility: Visibility) {
         val progressBar = binding.progressbarMainActivity
-        progressBar.visibility = when (visibility) {
-            Visibility.VISIBLE -> View.VISIBLE
-            Visibility.GONE -> View.GONE
-            Visibility.INVISIBLE -> View.INVISIBLE
-        }
+        progressBar.visibility = visibility.state()
     }
 
     private fun checkExternalStoragePermission(onGranted: () -> Unit) {
