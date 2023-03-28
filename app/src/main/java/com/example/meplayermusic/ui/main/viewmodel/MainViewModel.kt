@@ -22,6 +22,8 @@ class MainViewModel(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
 
+    private val subscription = MutableLiveData<String?>(null)
+
     private val _mediaItems = MutableLiveData<Resource<List<Music>>>()
     internal val mediaItems: LiveData<Resource<List<Music>>> = _mediaItems
 
@@ -33,31 +35,6 @@ class MainViewModel(
 
     private val _currentMusicDuration = MutableLiveData<Long?>()
     internal val currentMusicDuration: LiveData<Long?> = _currentMusicDuration
-
-    init {
-        _mediaItems.postValue(Resource.loading(null))
-        musicServiceConnection.subscribe(
-            MEDIA_ROOT_ID,
-            object : MediaBrowserCompat.SubscriptionCallback() {
-                override fun onChildrenLoaded(
-                    parentId: String,
-                    children: MutableList<MediaBrowserCompat.MediaItem>
-                ) {
-                    super.onChildrenLoaded(parentId, children)
-                    val items = children.map {
-                        Music(
-                            id = it.mediaId!!,
-                            image = it.description.iconUri,
-                            title = it.description.title.toString(),
-                            artist = it.description.subtitle.toString(),
-                            uri = it.description.mediaUri.toString()
-                        )
-                    }
-                    _mediaItems.postValue(Resource.success(items))
-                }
-            })
-        updateCurrentlyMusicPosition()
-    }
 
     private fun updateCurrentlyMusicPosition() {
         viewModelScope.launch {
@@ -76,26 +53,72 @@ class MainViewModel(
         musicServiceConnection.transportControls.skipToNext()
     }
 
-    fun playOrToggleMusic(music: Music, toggle: Boolean = false) {
+    fun playOrToggleMusic(music: Music, toggle: Boolean = false, parentId: String = MEDIA_ROOT_ID) {
         val isPrepared = playbackState.value?.isPrepared ?: false
-        Log.d("Tests", "playOrToggleMusic: ${music.id}")
-        if (music.id.trim().isEmpty()) {
-            mediaItems.value?.data?.get(0)?.id?.let {
-                musicServiceConnection.transportControls.playFromMediaId(it, null)
-                return
-            }
-        }
-        if (isPrepared && music.id == currentPlayingMusic.value?.description?.mediaId) {
-            playbackState.value?.let { state ->
-                when {
-                    state.isPlaying -> if (toggle) musicServiceConnection.transportControls.pause()
-                    state.isPlayEnabled -> musicServiceConnection.transportControls.play()
-                    else -> Unit
+        checkSubscription(parentId) {
+            Log.d("Tests", "playOrToggleMusic: ${music.id}")
+            if (music.id.trim().isEmpty()) {
+                mediaItems.value?.data?.get(0)?.id?.let {
+                    musicServiceConnection.transportControls.playFromMediaId(it, null)
+                    return@checkSubscription
                 }
             }
-        } else {
-            musicServiceConnection.transportControls.playFromMediaId(music.id, null)
+            if (isPrepared && music.id == currentPlayingMusic.value?.description?.mediaId) {
+                playbackState.value?.let { state ->
+                    when {
+                        state.isPlaying -> if (toggle) musicServiceConnection.transportControls.pause()
+                        state.isPlayEnabled -> musicServiceConnection.transportControls.play()
+                        else -> Unit
+                    }
+                }
+            } else {
+                musicServiceConnection.transportControls.playFromMediaId(music.id, null)
+            }
         }
+    }
+
+    private fun checkSubscription(parentId: String, onSubscribed: () -> Unit) {
+        subscription.value?.let {
+            if (it == parentId) {
+                onSubscribed()
+            } else {
+                subscribe(parentId) {
+                    subscription.postValue(parentId)
+                    onSubscribed()
+                }
+            }
+        } ?: run {
+            subscribe(parentId) {
+                subscription.postValue(parentId)
+                onSubscribed()
+            }
+        }
+    }
+
+    private fun subscribe(parentId: String, onSubscribed: () -> Unit) {
+        _mediaItems.postValue(Resource.loading(null))
+        musicServiceConnection.subscribe(
+            parentId,
+            object : MediaBrowserCompat.SubscriptionCallback() {
+                override fun onChildrenLoaded(
+                    parentId: String,
+                    children: MutableList<MediaBrowserCompat.MediaItem>
+                ) {
+                    super.onChildrenLoaded(parentId, children)
+                    val items = children.map {
+                        Music(
+                            id = it.mediaId!!,
+                            image = it.description.iconUri.toString(),
+                            title = it.description.title.toString(),
+                            artist = it.description.subtitle.toString(),
+                            uri = it.description.mediaUri.toString()
+                        )
+                    }
+                    _mediaItems.postValue(Resource.success(items))
+                }
+            })
+        updateCurrentlyMusicPosition()
+        onSubscribed()
     }
 
     fun searchByName(query: String): List<Music> =

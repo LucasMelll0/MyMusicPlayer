@@ -1,5 +1,9 @@
 package com.example.meplayermusic.di
 
+import androidx.room.Room
+import com.example.meplayermusic.constantes.DATABASE_NAME
+import com.example.meplayermusic.datasource.AppDataBase
+import com.example.meplayermusic.repository.MusicRepository
 import com.example.meplayermusic.services.exoplayer.callbacks.MusicServiceConnection
 import com.example.meplayermusic.ui.musiclist.recyclerview.MusicAdapter
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
@@ -47,4 +51,22 @@ val playerModule = module {
     single {
         MusicAdapter()
     }
+}
+
+val roomModule = module {
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDataBase::class.java,
+            DATABASE_NAME
+        ).build()
+    }
+
+    single {
+        get<AppDataBase>().musicDao()
+    }
+}
+
+val repositoryModule = module {
+    single { MusicRepository(androidContext(), get(), get()) }
 }

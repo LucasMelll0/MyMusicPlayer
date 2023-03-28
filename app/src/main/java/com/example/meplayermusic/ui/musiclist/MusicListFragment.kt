@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.meplayermusic.R
 import com.example.meplayermusic.databinding.FragmentMusicListBinding
@@ -18,9 +16,7 @@ import com.example.meplayermusic.extensions.toMusic
 import com.example.meplayermusic.extensions.tryLoad
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Status
-import com.example.meplayermusic.ui.musiclist.recyclerview.MusicAdapter
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,7 +24,6 @@ class MusicListFragment : Fragment() {
 
     private var _binding: FragmentMusicListBinding? = null
     private val binding get() = _binding!!
-    private val adapter: MusicAdapter by inject()
     private val viewModel: MainViewModel by viewModel()
     private var currentMusic: Music? = null
     private var playbackState: PlaybackStateCompat? = null
@@ -43,7 +38,6 @@ class MusicListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setsUpRecyclerView()
         setsUpNavigationToPlayerFragment()
     }
 
@@ -51,9 +45,9 @@ class MusicListFragment : Fragment() {
         val toolbar = binding.toolbarMusicListFragment
         toolbar.inflateMenu(R.menu.menu_music_list_fragment)
         toolbar.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.searchview_menu_music_list_fragment -> {
-                    setsUpSearchView(it.actionView as? SearchView)
+                    /*setsUpSearchView(it.actionView as? SearchView)*/
                     true
                 }
                 else -> false
@@ -61,7 +55,7 @@ class MusicListFragment : Fragment() {
         }
     }
 
-    private fun setsUpSearchView(searchView: SearchView?) {
+    /*private fun setsUpSearchView(searchView: SearchView?) {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -80,7 +74,7 @@ class MusicListFragment : Fragment() {
             setsUpMediaItemsObserver()
             false
         }
-    }
+    }*/
 
     private fun setsUpNavigationToPlayerFragment() {
         val textViewMusicTitle = binding.textviewMusicTitleMiniPlayerListFragment
@@ -89,11 +83,6 @@ class MusicListFragment : Fragment() {
         }
     }
 
-    private fun setsUpRecyclerView() {
-        val recyclerViewMusic = binding.recyclerviewMusicListFragment
-        recyclerViewMusic.adapter = adapter
-        recyclerViewMusic.layoutManager = LinearLayoutManager(requireContext())
-    }
 
     override fun onStart() {
         super.onStart()
@@ -108,15 +97,11 @@ class MusicListFragment : Fragment() {
         buttonPlayPause.setOnClickListener {
             currentMusic?.let { music ->
                 Log.d("Tests", "setsUpTransportControllers: $music")
-                    viewModel.playOrToggleMusic(music, true)
+                viewModel.playOrToggleMusic(music, true)
             }
         }
         buttonForward.setOnClickListener {
             viewModel.skipToNextMusic()
-        }
-        adapter.onClick = {
-            Log.d("Tests", "setsUpTransportControllers: $it")
-            viewModel.playOrToggleMusic(it)
         }
     }
 

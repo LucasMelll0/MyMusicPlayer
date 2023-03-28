@@ -15,17 +15,17 @@
         app:title="@string/app_name"
         app:titleCentered="true"
         app:titleTextColor="@color/purple_900"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_music_list_fragment"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout_music_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_music_list_fragment"/>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager_music_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/_cardview_mini_player"
-        tools:listitem="@layout/music_item"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_music_list_fragment"/>
-
+        app:layout_constraintTop_toBottomOf="@id/tablayout_music_list"
+        app:layout_constraintBottom_toTopOf="@id/_cardview_mini_player"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/_cardview_mini_player"
         style="@style/DefaultCardView"

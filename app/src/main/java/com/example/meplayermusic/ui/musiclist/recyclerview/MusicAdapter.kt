@@ -10,7 +10,8 @@ import com.example.meplayermusic.extensions.tryLoad
 import com.example.meplayermusic.model.Music
 
 class MusicAdapter(
-    var onClick: (music: Music) -> Unit = {}
+    var onClick: (music: Music) -> Unit = {},
+    var onCheckBoxClick: (music: Music, isChecked: Boolean) -> Unit = { _,_ ->}
 ) : ListAdapter<Music, MusicAdapter.MusicViewHolder>(differCallBack) {
 
     companion object {
@@ -32,6 +33,7 @@ class MusicAdapter(
             val imageViewMusic = binding.imageviewMusicItem
             val textViewTitle = binding.textviewTitleMusicItem
             val textViewAuthor = binding.textviewAuthorMusicItem
+            val checkBoxFav = binding.checkboxFavoriteMusicItem
             music.apply {
                 imageViewMusic.tryLoad(image)
                 textViewTitle.text = title
@@ -39,6 +41,9 @@ class MusicAdapter(
             }
             binding.root.setOnClickListener {
                 onClick(music)
+            }
+            checkBoxFav.setOnCheckedChangeListener { _, isChecked ->
+                onCheckBoxClick(music, isChecked)
             }
         }
 

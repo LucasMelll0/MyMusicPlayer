@@ -9,7 +9,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
-import com.example.meplayermusic.datasource.MusicDataSource
+import com.example.meplayermusic.repository.MusicRepository
 import com.example.meplayermusic.services.exoplayer.callbacks.MediaPlayerEventListener
 import com.example.meplayermusic.services.exoplayer.callbacks.MediaPlayerNotificationListener
 import com.example.meplayermusic.services.exoplayer.callbacks.MediaPlayerPlaybackPreparer
@@ -17,7 +17,6 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
-import com.google.android.exoplayer2.upstream.DefaultDataSource
 import org.koin.android.ext.android.inject
 
 const val LOG_TAG = "Media Play Service"
@@ -28,7 +27,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
 
     private val exoPlayer: ExoPlayer by inject()
     var isForegroundService = false
-    private val dataSourceFactory: DefaultDataSource.Factory by inject()
+    private val repository: MusicRepository by inject()
     private lateinit var mediaSession: MediaSessionCompat
     private var mediaSessionConnector: MediaSessionConnector? = null
     private var isPlayerInitialized = false
@@ -64,7 +63,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
         val mediaPlaybackPreparer = MediaPlayerPlaybackPreparer() {
             currentPlayingMusic = it
             preparePlayer(
-                MusicDataSource.musicMetadataList,
+                repository.getAllMusicMetaData(),
                 it,
                 true
             )
@@ -91,12 +90,12 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     ) {
         when (parentId) {
             MEDIA_ROOT_ID -> {
-                val mediaItems = MusicDataSource.asMediaItems()
+                val mediaItems = repository.getAllMediaItems()
                 result.sendResult(mediaItems)
                 if (!isPlayerInitialized && mediaItems.isNotEmpty()) {
                     preparePlayer(
-                        MusicDataSource.musicMetadataList,
-                        MusicDataSource.musicMetadataList[0],
+                        repository.getAllMusicMetaData(),
+                        repository.getAllMusicMetaData()[0],
                         false
                     )
                     isPlayerInitialized = true
@@ -107,7 +106,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
 
     private inner class MediaQueueNavigator : TimelineQueueNavigator(mediaSession) {
         override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return MusicDataSource.musicMetadataList[windowIndex].description
+            return repository.getAllMusicMetaData()[windowIndex].description
         }
     }
 
@@ -122,7 +121,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
         play: Boolean
     ) {
         val currentMusicIndex = currentPlayingMusic?.let { musicList.indexOf(musicToPlay) } ?: 0
-        exoPlayer.setMediaSource(MusicDataSource.asMediaSource(dataSourceFactory))
+        exoPlayer.setMediaSource(repository.getAllMediaSource())
         exoPlayer.prepare()
         exoPlayer.seekTo(currentMusicIndex, 0L)
         exoPlayer.playWhenReady = play
