@@ -8,11 +8,14 @@ import com.example.meplayermusic.model.Music
 interface MusicDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(music: Music)
+    suspend fun save(music: Music)
 
     @Delete
-    fun remove(music: Music)
+    suspend fun remove(music: Music)
 
     @Query("SELECT * FROM Music")
-    fun getAll(): LiveData<List<Music>>
+    fun getAllLiveData(): LiveData<List<Music>>
+
+    @Query("SELECT * FROM Music")
+    suspend fun getAll(): List<Music>
 }

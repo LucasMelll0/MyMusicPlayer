@@ -6,7 +6,7 @@ import com.example.meplayermusic.datasource.dao.MusicDao
 import com.example.meplayermusic.model.Music
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [Music::class],
     exportSchema = true
 )

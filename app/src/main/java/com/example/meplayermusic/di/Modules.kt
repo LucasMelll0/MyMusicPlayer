@@ -5,8 +5,10 @@ import com.example.meplayermusic.constantes.DATABASE_NAME
 import com.example.meplayermusic.datasource.AppDataBase
 import com.example.meplayermusic.repository.MusicRepository
 import com.example.meplayermusic.services.exoplayer.callbacks.MusicServiceConnection
-import com.example.meplayermusic.ui.musiclist.recyclerview.MusicAdapter
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
+import com.example.meplayermusic.ui.musiclist.all.viewmodel.MusicListViewModel
+import com.example.meplayermusic.ui.musiclist.recyclerview.AllMusicsAdapter
+import com.example.meplayermusic.ui.musiclist.recyclerview.FavoritesAdapter
 import com.example.meplayermusic.ui.player.viewmodel.PlayerViewModel
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
@@ -22,7 +24,7 @@ val playerModule = module {
     }
 
     viewModel {
-        MainViewModel(get())
+        MainViewModel(get(), get())
     }
 
     single {
@@ -47,10 +49,6 @@ val playerModule = module {
             setAudioAttributes(get(), true)
         }
     }
-
-    single {
-        MusicAdapter()
-    }
 }
 
 val roomModule = module {
@@ -59,7 +57,9 @@ val roomModule = module {
             androidContext(),
             AppDataBase::class.java,
             DATABASE_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     single {
@@ -68,5 +68,21 @@ val roomModule = module {
 }
 
 val repositoryModule = module {
-    single { MusicRepository(androidContext(), get(), get()) }
+    single { MusicRepository(get(), get()) }
+}
+
+val allMusicsModule = module {
+    viewModel {
+        MusicListViewModel(get())
+    }
+
+    single {
+        AllMusicsAdapter()
+    }
+}
+
+val favoritesModule = module {
+    single {
+        FavoritesAdapter()
+    }
 }

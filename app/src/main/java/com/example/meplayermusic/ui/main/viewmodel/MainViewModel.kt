@@ -1,5 +1,6 @@
 package com.example.meplayermusic.ui.main.viewmodel
 
+import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -12,14 +13,17 @@ import com.example.meplayermusic.extensions.isPlaying
 import com.example.meplayermusic.extensions.isPrepared
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Resource
-import com.example.meplayermusic.services.exoplayer.MEDIA_ROOT_ID
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
+import com.example.meplayermusic.repository.MusicRepository
 import com.example.meplayermusic.services.exoplayer.MediaPlayService
 import com.example.meplayermusic.services.exoplayer.callbacks.MusicServiceConnection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val musicServiceConnection: MusicServiceConnection
+    private val musicServiceConnection: MusicServiceConnection,
+    private val repository: MusicRepository
+
 ) : ViewModel() {
 
     private val subscription = MutableLiveData<String?>(null)
@@ -36,6 +40,9 @@ class MainViewModel(
     private val _currentMusicDuration = MutableLiveData<Long?>()
     internal val currentMusicDuration: LiveData<Long?> = _currentMusicDuration
 
+    fun fetchData(context: Context) {
+        repository.fetchData(context)
+    }
     private fun updateCurrentlyMusicPosition() {
         viewModelScope.launch {
             while (true) {
@@ -48,6 +55,19 @@ class MainViewModel(
             }
         }
     }
+
+    fun addToFavorites(music: Music) {
+        viewModelScope.launch {
+            repository.addToFavorites(music)
+        }
+    }
+
+    fun removeFromFavorites(music: Music) {
+        viewModelScope.launch {
+            repository.removeFromFavorites(music)
+        }
+    }
+    fun getCurrentlySubscription(): String? = subscription.value
 
     fun skipToNextMusic() {
         musicServiceConnection.transportControls.skipToNext()

@@ -9,8 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.meplayermusic.R
 import com.example.meplayermusic.databinding.ActivityMainBinding
-import com.example.meplayermusic.datasource.MusicDataSource
 import com.example.meplayermusic.other.Visibility
+import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            MusicDataSource.fetchMediaData(this@MainActivity)
+            viewModel.fetchData(this@MainActivity)
         } else {
             Toast.makeText(
                 this@MainActivity,
@@ -30,13 +31,14 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
     }
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         checkExternalStoragePermission {
             progressBarVisibility(Visibility.VISIBLE)
-            MusicDataSource.fetchMediaData(this@MainActivity)
+            viewModel.fetchData(this@MainActivity)
             progressBarVisibility(Visibility.GONE)
         }
     }

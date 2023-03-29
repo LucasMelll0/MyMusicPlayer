@@ -24,7 +24,9 @@
         tools:text="Jacó Segurou Um Anjo"
         android:textStyle="bold"
         android:layout_marginHorizontal="@dimen/default_horizontal_margin"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/checkbox_favorite_music_item"
+        android:maxLines="2"
+        android:ellipsize="end"
         />
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textview_author_music_item"

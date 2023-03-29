@@ -20,13 +20,13 @@ class MusicDataSource {
 
     companion object {
 
-        private val musicList: MutableList<Music> = mutableListOf()
+        val musicList: MutableList<Music> = mutableListOf()
         var musicMetadataList = emptyList<MediaMetadataCompat>()
 
         fun fetchMediaData(context: Context) {
             getAllAudioFiles(context)
             musicMetadataList = musicList.map { music ->
-                MediaMetadataCompat.Builder()
+                Builder()
                     .putString(METADATA_KEY_ARTIST, music.artist)
                     .putString(METADATA_KEY_MEDIA_ID, music.id)
                     .putString(METADATA_KEY_TITLE, music.title)

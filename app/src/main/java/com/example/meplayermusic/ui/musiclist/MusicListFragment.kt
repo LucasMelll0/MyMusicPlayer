@@ -2,13 +2,13 @@ package com.example.meplayermusic.ui.musiclist
 
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import coil.load
 import com.example.meplayermusic.R
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.databinding.FragmentMusicListBinding
 import com.example.meplayermusic.extensions.goTo
 import com.example.meplayermusic.extensions.isPlaying
@@ -17,6 +17,11 @@ import com.example.meplayermusic.extensions.tryLoad
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Status
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
+import com.example.meplayermusic.ui.musiclist.all.AllMusicsFragment
+import com.example.meplayermusic.ui.musiclist.favorites.FavoritesFragment
+import com.example.meplayermusic.ui.musiclist.viewpager.ViewPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,7 +33,6 @@ class MusicListFragment : Fragment() {
     private var currentMusic: Music? = null
     private var playbackState: PlaybackStateCompat? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -39,6 +43,7 @@ class MusicListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setsUpNavigationToPlayerFragment()
+        setsUpToolbar()
     }
 
     private fun setsUpToolbar() {
@@ -86,9 +91,28 @@ class MusicListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        setsUpTabLayout()
         setsUpTransportControllers()
         setsUpObservers()
-        setsUpToolbar()
+    }
+
+    private fun setsUpTabLayout() {
+        activity?.let {
+            val adapter = ViewPagerAdapter(it)
+            binding.apply {
+                viewpagerMusicList.adapter = adapter
+                adapter.addFragment(AllMusicsFragment(), getString(R.string.common_all))
+                adapter.addFragment(FavoritesFragment(), getString(R.string.common_favorites))
+                viewpagerMusicList.offscreenPageLimit = adapter.itemCount
+                val mediator = TabLayoutMediator(
+                    tablayoutMusicList,
+                    viewpagerMusicList
+                ) { tab: TabLayout.Tab, position: Int ->
+                    tab.text = adapter.getTitle(position)
+                }
+                mediator.attach()
+            }
+        }
     }
 
     private fun setsUpTransportControllers() {
@@ -96,8 +120,8 @@ class MusicListFragment : Fragment() {
         val buttonForward = binding.imagebuttonForwardMiniPlayerListFragment
         buttonPlayPause.setOnClickListener {
             currentMusic?.let { music ->
-                Log.d("Tests", "setsUpTransportControllers: $music")
-                viewModel.playOrToggleMusic(music, true)
+                val currentlySubscription = viewModel.getCurrentlySubscription()
+                viewModel.playOrToggleMusic(music, true, currentlySubscription ?: MEDIA_ROOT_ID)
             }
         }
         buttonForward.setOnClickListener {
@@ -135,7 +159,6 @@ class MusicListFragment : Fragment() {
                 when (result.status) {
                     Status.SUCCESS -> {
                         result.data?.let { musicList ->
-                            adapter.submitList(musicList)
                             if (musicList.isNotEmpty()) {
                                 val imageViewMiniPlayer =
                                     binding.imageviewMusicImageMiniPlayerListFragment

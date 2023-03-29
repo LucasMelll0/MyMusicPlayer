@@ -9,6 +9,8 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
+import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.repository.MusicRepository
 import com.example.meplayermusic.services.exoplayer.callbacks.MediaPlayerEventListener
 import com.example.meplayermusic.services.exoplayer.callbacks.MediaPlayerNotificationListener
@@ -20,8 +22,6 @@ import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import org.koin.android.ext.android.inject
 
 const val LOG_TAG = "Media Play Service"
-
-const val MEDIA_ROOT_ID = "media_root_id"
 
 class MediaPlayService : MediaBrowserServiceCompat() {
 
@@ -95,6 +95,18 @@ class MediaPlayService : MediaBrowserServiceCompat() {
                 if (!isPlayerInitialized && mediaItems.isNotEmpty()) {
                     preparePlayer(
                         repository.getAllMusicMetaData(),
+                        repository.getAllMusicMetaData()[0],
+                        false
+                    )
+                    isPlayerInitialized = true
+                }
+            }
+            MEDIA_FAVORITES_ID -> {
+                val mediaItems = repository.getFavoritesMediaItems()
+                result.sendResult(mediaItems)
+                if (!isPlayerInitialized && mediaItems.isNotEmpty()) {
+                    preparePlayer(
+                        repository.getFavoritesMetaData(),
                         repository.getAllMusicMetaData()[0],
                         false
                     )

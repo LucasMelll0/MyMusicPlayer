@@ -9,22 +9,20 @@ import com.example.meplayermusic.databinding.MusicItemBinding
 import com.example.meplayermusic.extensions.tryLoad
 import com.example.meplayermusic.model.Music
 
-class MusicAdapter(
+abstract class MusicAdapter(
     var onClick: (music: Music) -> Unit = {},
-    var onCheckBoxClick: (music: Music, isChecked: Boolean) -> Unit = { _,_ ->}
-) : ListAdapter<Music, MusicAdapter.MusicViewHolder>(differCallBack) {
+    var onCheckBoxClick: (music: Music, isChecked: Boolean) -> Unit = { _, _ -> },
+    differCallback: DiffUtil.ItemCallback<Music> = object :
+        DiffUtil.ItemCallback<Music>() {
+        override fun areItemsTheSame(oldItem: Music, newItem: Music): Boolean {
+            return false
+        }
 
-    companion object {
-        private val differCallBack = object : DiffUtil.ItemCallback<Music>() {
-            override fun areItemsTheSame(oldItem: Music, newItem: Music): Boolean {
-                return oldItem.uri == newItem.uri
-            }
-
-            override fun areContentsTheSame(oldItem: Music, newItem: Music): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(oldItem: Music, newItem: Music): Boolean {
+            return false
         }
     }
+) : ListAdapter<Music, MusicAdapter.MusicViewHolder>(differCallback) {
 
     inner class MusicViewHolder(private val binding: MusicItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -38,6 +36,9 @@ class MusicAdapter(
                 imageViewMusic.tryLoad(image)
                 textViewTitle.text = title
                 textViewAuthor.text = artist
+            }
+            if (music.isFavorite) {
+                binding.checkboxFavoriteMusicItem.isChecked = true
             }
             binding.root.setOnClickListener {
                 onClick(music)
