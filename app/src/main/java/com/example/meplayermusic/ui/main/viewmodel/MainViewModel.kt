@@ -43,6 +43,10 @@ class MainViewModel(
     fun fetchData(context: Context) {
         repository.fetchData(context)
     }
+
+    init {
+        updateCurrentlyMusicPosition()
+    }
     private fun updateCurrentlyMusicPosition() {
         viewModelScope.launch {
             while (true) {
@@ -126,7 +130,6 @@ class MainViewModel(
                     _mediaItems.postValue(Resource.success(items))
                 }
             })
-        updateCurrentlyMusicPosition()
         onSubscribed()
     }
 

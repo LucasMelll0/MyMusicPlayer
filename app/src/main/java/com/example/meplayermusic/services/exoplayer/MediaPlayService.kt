@@ -8,6 +8,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
 import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
 import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
@@ -88,6 +89,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
+        Log.d("Tests", "onLoadChildren: $parentId")
         when (parentId) {
             MEDIA_ROOT_ID -> {
                 val mediaItems = repository.getAllMediaItems()
