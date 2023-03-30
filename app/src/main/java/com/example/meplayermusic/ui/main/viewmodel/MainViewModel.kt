@@ -56,17 +56,6 @@ class MainViewModel(
         }
     }
 
-    fun addToFavorites(music: Music) {
-        viewModelScope.launch {
-            repository.addToFavorites(music)
-        }
-    }
-
-    fun removeFromFavorites(music: Music) {
-        viewModelScope.launch {
-            repository.removeFromFavorites(music)
-        }
-    }
     fun getCurrentlySubscription(): String? = subscription.value
 
     fun skipToNextMusic() {

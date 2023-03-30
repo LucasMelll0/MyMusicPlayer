@@ -20,6 +20,11 @@ data class Music(
     val uri: String = "",
     var isFavorite: Boolean = false
 ) {
+
+    override fun equals(other: Any?): Boolean {
+        return this.uri == (other as Music).uri && this.title.equals(other.title, true)
+    }
+
     override fun toString(): String {
         return "id: $id \n image: $image \n title: $title " +
                 "\n author: $artist \n duration: $duration \n $uri"
@@ -49,5 +54,14 @@ data class Music(
             .setIconBitmap(toMediaMetadata().description.iconBitmap)
             .build()
         return MediaItem(desc, MediaItem.FLAG_PLAYABLE)
+    }
+
+    override fun hashCode(): Int {
+        var result = image?.hashCode() ?: 0
+        result = 31 * result + title.hashCode()
+        result = 31 * result + artist.hashCode()
+        result = 31 * result + duration
+        result = 31 * result + uri.hashCode()
+        return result
     }
 }

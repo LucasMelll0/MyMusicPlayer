@@ -2,6 +2,7 @@ package com.example.meplayermusic.ui.musiclist.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -37,14 +38,14 @@ abstract class MusicAdapter(
                 textViewTitle.text = title
                 textViewAuthor.text = artist
             }
-            if (music.isFavorite) {
-                binding.checkboxFavoriteMusicItem.isChecked = true
-            }
+            checkBoxFav.isChecked = music.isFavorite
             binding.root.setOnClickListener {
                 onClick(music)
             }
-            checkBoxFav.setOnCheckedChangeListener { _, isChecked ->
-                onCheckBoxClick(music, isChecked)
+            checkBoxFav.setOnClickListener {
+                if (it is AppCompatCheckBox) {
+                    onCheckBoxClick(music, it.isChecked)
+                }
             }
         }
 

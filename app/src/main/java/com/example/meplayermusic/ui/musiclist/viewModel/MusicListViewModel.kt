@@ -1,13 +1,15 @@
-package com.example.meplayermusic.ui.musiclist.all.viewmodel
+package com.example.meplayermusic.ui.musiclist.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.meplayermusic.extensions.toMusic
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Resource
 import com.example.meplayermusic.repository.MusicRepository
+import kotlinx.coroutines.launch
 
 class MusicListViewModel(
     private val repository: MusicRepository
@@ -21,13 +23,44 @@ class MusicListViewModel(
     fun update(favorites: List<Music>) {
         repository.getAllMusicMetaData().mapNotNull { it.toMusic() }.also { musicList ->
             for (music in musicList) {
-                if (favorites.firstOrNull { it.uri == music.uri } != null) {
+                if (favorites.find { it == music } != null) {
                     music.isFavorite = true
                 }
             }
-            Log.d("Tests", "update: $favorites")
-            Log.d("Tests", "update: ${musicList.filter { it.isFavorite }}")
             _musics.value = Resource.success(musicList)
+        }
+    }
+
+    fun addToFavorites(music: Music) {
+        viewModelScope.launch {
+            favorites.value?.let { musicList ->
+                var found = false
+                for (item in musicList) {
+                    if (item == music) {
+                        found = true
+                    }
+                }
+                if (!found) {
+                    music.isFavorite = true
+                    repository.addToFavorites(music)
+                }
+            }
+        }
+    }
+
+    fun removeFromFavorites(music: Music) {
+        viewModelScope.launch {
+            favorites.value?.let { musicList ->
+                var found = false
+                for (item in musicList) {
+                    if (item == music) {
+                        found = true
+                    }
+                }
+                if (found) {
+                    repository.removeFromFavorites(music)
+                }
+            }
         }
     }
 

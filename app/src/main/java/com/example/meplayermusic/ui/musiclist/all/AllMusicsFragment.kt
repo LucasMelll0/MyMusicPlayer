@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meplayermusic.databinding.FragmentAllMusicsBinding
 import com.example.meplayermusic.other.Status
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
-import com.example.meplayermusic.ui.musiclist.all.viewmodel.MusicListViewModel
+import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
 import com.example.meplayermusic.ui.musiclist.recyclerview.AllMusicsAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,9 +49,9 @@ class AllMusicsFragment : Fragment() {
         }
         adapter.onCheckBoxClick = { music, isChecked ->
             if (isChecked) {
-                mainViewModel.addToFavorites(music)
+                musicListViewModel.addToFavorites(music)
             } else {
-                mainViewModel.removeFromFavorites(music)
+                musicListViewModel.removeFromFavorites(music)
             }
         }
     }
