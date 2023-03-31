@@ -43,44 +43,9 @@ class MusicListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setsUpNavigationToPlayerFragment()
-        setsUpToolbar()
         setsUpTabLayout()
     }
 
-    private fun setsUpToolbar() {
-        val toolbar = binding.toolbarMusicListFragment
-        toolbar.inflateMenu(R.menu.menu_music_list_fragment)
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.searchview_menu_music_list_fragment -> {
-                    /*setsUpSearchView(it.actionView as? SearchView)*/
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-
-    /*private fun setsUpSearchView(searchView: SearchView?) {
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    val filteredList = viewModel.searchByName(it)
-                    adapter.submitList(filteredList)
-
-                } ?: setsUpMediaItemsObserver()
-                return false
-            }
-        })
-        searchView?.setOnCloseListener {
-            setsUpMediaItemsObserver()
-            false
-        }
-    }*/
 
     private fun setsUpNavigationToPlayerFragment() {
         val textViewMusicTitle = binding.textviewMusicTitleMiniPlayerListFragment

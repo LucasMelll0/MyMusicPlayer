@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient_light"
+    android:background="@color/purple_100"
     android:fitsSystemWindows="true"
     tools:context=".ui.musiclist.MusicListFragment">
     <com.google.android.material.appbar.MaterialToolbar
@@ -19,6 +19,9 @@
         android:id="@+id/tablayout_music_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabTextColor="@color/purple_900"
+        app:tabIndicatorColor="@color/purple_900"
+        app:tabBackground="@color/purple_100"
         app:tabGravity="fill"
         app:tabMode="fixed"
         app:tabMaxWidth="0dp"
@@ -33,7 +36,7 @@
         android:id="@+id/_cardview_mini_player"
         style="@style/DefaultCardView"
         android:layout_margin="@dimen/default_margin"
-        app:cardBackgroundColor="@color/purple_50"
+        app:cardBackgroundColor="@color/purple_100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.meplayermusic.R
@@ -104,7 +105,7 @@ class PlayerFragment : Fragment() {
         }
         mainViewModel.currentMusicPosition.observe(this) {
             it?.let {
-                    updateCurrentPosition(it)
+                updateCurrentPosition(it)
             }
         }
         playerViewModel.playbackState.observe(this) {
@@ -158,7 +159,7 @@ class PlayerFragment : Fragment() {
     private fun updateCurrentPosition(position: Long) {
         val textViewMusicPosition = binding.textviewMusicPositionPlayerFragment
         val sliderMusicPosition = binding.sliderMusicPlayerFragment
-        if(position.toFloat() in sliderMusicPosition.valueFrom..sliderMusicPosition.valueTo) {
+        if (position.toFloat() in sliderMusicPosition.valueFrom..sliderMusicPosition.valueTo) {
             sliderMusicPosition.value = position.toFloat()
             textViewMusicPosition.text = position.toMinutesAndSeconds()
         }

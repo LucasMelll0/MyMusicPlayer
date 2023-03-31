@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun progressBarVisibility(visibility: Visibility) {
         val progressBar = binding.progressbarMainActivity
         progressBar.visibility = visibility.state()

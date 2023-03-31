@@ -1,5 +1,7 @@
 package com.example.meplayermusic.ui.musiclist.viewModel
 
+import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,6 +33,17 @@ class MusicListViewModel(
             _musics.value = Resource.success(musicList)
         }
     }
+
+    fun searchByName(query: String, parentId: String): List<Music> = when(parentId) {
+        MEDIA_ROOT_ID -> musics.value?.data?.filter { music ->
+            music.title.contains(query, true)
+        } ?: emptyList()
+        MEDIA_FAVORITES_ID -> favorites.value?.filter { music ->
+            music.title.contains(query, true)
+        } ?: emptyList()
+        else -> emptyList()
+    }
+
 
     fun addToFavorites(music: Music) {
         viewModelScope.launch {
@@ -73,3 +86,5 @@ class MusicListViewModel(
         }
     }
 }
+
+

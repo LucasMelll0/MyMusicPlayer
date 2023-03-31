@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.databinding.FragmentAllMusicsBinding
 import com.example.meplayermusic.other.Status
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
-import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
 import com.example.meplayermusic.ui.musiclist.recyclerview.AllMusicsAdapter
+import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,6 +38,27 @@ class AllMusicsFragment : Fragment() {
         setsUpRecyclerView()
     }
 
+    private fun setsUpSearchView(searchView: SearchView?) {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    val filteredList = musicListViewModel.searchByName(it, MEDIA_ROOT_ID)
+                    adapter.submitList(filteredList)
+
+                } ?: setsUpObservers()
+                return false
+            }
+        })
+        searchView?.setOnCloseListener {
+            setsUpObservers()
+            false
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         musicListViewModel.getAll()
@@ -57,9 +80,11 @@ class AllMusicsFragment : Fragment() {
     }
 
     private fun setsUpObservers() {
-        musicListViewModel.favorites.observe(this) {
-            musicListViewModel.update(it)
-        }
+        if (musicListViewModel.favorites.hasObservers()) musicListViewModel.favorites.removeObservers(
+            this
+        )
+        if (musicListViewModel.musics.hasObservers()) musicListViewModel.musics.removeObservers(this)
+
         musicListViewModel.musics.observe(this) {
             it?.let { result ->
                 when (result.status) {
@@ -72,6 +97,9 @@ class AllMusicsFragment : Fragment() {
                     Status.LOADING -> Unit
                 }
             }
+        }
+        musicListViewModel.favorites.observe(this) {
+            musicListViewModel.update(it)
         }
     }
 
