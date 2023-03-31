@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
 import com.example.meplayermusic.extensions.currentPlaybackPosition
 import com.example.meplayermusic.extensions.isPlayEnabled
 import com.example.meplayermusic.extensions.isPlaying
@@ -26,7 +27,7 @@ class MainViewModel(
 
 ) : ViewModel() {
 
-    private val subscription = MutableLiveData<String?>(null)
+    private val subscription = MutableLiveData(MEDIA_ROOT_ID)
 
     private val _mediaItems = MutableLiveData<Resource<List<Music>>>()
     internal val mediaItems: LiveData<Resource<List<Music>>> = _mediaItems
@@ -69,9 +70,9 @@ class MainViewModel(
     fun playOrToggleMusic(music: Music, toggle: Boolean = false, parentId: String = MEDIA_ROOT_ID) {
         val isPrepared = playbackState.value?.isPrepared ?: false
         checkSubscription(parentId) {
-            Log.d("Tests", "playOrToggleMusic: ${music.id}")
-            if (music.id.trim().isEmpty()) {
+            if (music.id.isEmpty()) {
                 mediaItems.value?.data?.get(0)?.id?.let {
+                    Log.d("Tests", "playOrToggleMusic: ${music.id.isEmpty()}")
                     musicServiceConnection.transportControls.playFromMediaId(it, null)
                     return@checkSubscription
                 }
@@ -91,19 +92,22 @@ class MainViewModel(
     }
 
     private fun checkSubscription(parentId: String, onSubscribed: () -> Unit) {
-        subscription.value?.let {
+        subscription.value!!.let {
             if (it == parentId) {
                 onSubscribed()
             } else {
-                subscribe(parentId) {
-                    subscription.postValue(parentId)
-                    onSubscribed()
+                musicServiceConnection.unsubscribe(it)
+                when(parentId) {
+                    MEDIA_ROOT_ID -> subscribe(MEDIA_ROOT_ID) {
+                        onSubscribed()
+                        subscription.value = MEDIA_ROOT_ID
+                    }
+                    MEDIA_FAVORITES_ID -> subscribe(MEDIA_FAVORITES_ID) {
+                        onSubscribed()
+                        subscription.value = MEDIA_FAVORITES_ID
+                    }
                 }
-            }
-        } ?: run {
-            subscribe(parentId) {
-                subscription.postValue(parentId)
-                onSubscribed()
+
             }
         }
     }
@@ -142,7 +146,7 @@ class MainViewModel(
     override fun onCleared() {
         super.onCleared()
         musicServiceConnection.unsubscribe(
-            MEDIA_ROOT_ID,
-            object : MediaBrowserCompat.SubscriptionCallback() {})
+            subscription.value ?: MEDIA_ROOT_ID
+        )
     }
 }

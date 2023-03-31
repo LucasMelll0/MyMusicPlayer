@@ -21,6 +21,7 @@ class MusicListViewModel(
     internal val favorites = repository.getFavoritesLiveData()
 
     fun update(favorites: List<Music>) {
+        repository.updateFavorites(favorites)
         repository.getAllMusicMetaData().mapNotNull { it.toMusic() }.also { musicList ->
             for (music in musicList) {
                 if (favorites.find { it == music } != null) {

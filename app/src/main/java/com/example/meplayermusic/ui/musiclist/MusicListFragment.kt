@@ -44,6 +44,7 @@ class MusicListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setsUpNavigationToPlayerFragment()
         setsUpToolbar()
+        setsUpTabLayout()
     }
 
     private fun setsUpToolbar() {
@@ -89,9 +90,9 @@ class MusicListFragment : Fragment() {
     }
 
 
+
     override fun onStart() {
         super.onStart()
-        setsUpTabLayout()
         setsUpTransportControllers()
         setsUpObservers()
     }

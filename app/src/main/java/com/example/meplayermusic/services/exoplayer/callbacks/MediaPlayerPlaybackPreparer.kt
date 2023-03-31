@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.os.ResultReceiver
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import com.example.meplayermusic.datasource.MusicDataSource
+import android.util.Log
+import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
+import com.example.meplayermusic.repository.MusicRepository
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 
 class MediaPlayerPlaybackPreparer(
+    private val parentId: String = MEDIA_ROOT_ID,
+    private val repository: MusicRepository,
     private val playerPrepared: (MediaMetadataCompat?) -> Unit
 ) : MediaSessionConnector.PlaybackPreparer {
     override fun onCommand(
@@ -27,8 +32,16 @@ class MediaPlayerPlaybackPreparer(
     override fun onPrepare(playWhenReady: Boolean) = Unit
 
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
-        val itemToPlay =
-            MusicDataSource.musicMetadataList.find { mediaId == it.description.mediaId }
+        val itemToPlay = when (parentId) {
+            MEDIA_ROOT_ID -> {
+                repository.getAllMusicMetaData().find { mediaId == it.description.mediaId }
+            }
+            MEDIA_FAVORITES_ID -> {
+                repository.getFavoritesMetadata().find { mediaId == it.description.mediaId }
+            }
+            else -> repository.getAllMusicMetaData().find { mediaId == it.description.mediaId }
+        }
+        Log.d("Tests", "onPrepareFromMediaId: ${itemToPlay?.description?.mediaId}")
         playerPrepared(itemToPlay)
     }
 

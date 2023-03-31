@@ -20,6 +20,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
+import com.google.android.exoplayer2.source.MediaSource
 import org.koin.android.ext.android.inject
 
 const val LOG_TAG = "Media Play Service"
@@ -35,6 +36,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     private var currentPlayingMusic: MediaMetadataCompat? = null
     private lateinit var musicNotificationManager: MediaPlayerNotificationManager
     private lateinit var mediaPlayerEventListener: MediaPlayerEventListener
+    private var playListId: String = MEDIA_ROOT_ID
 
     companion object {
         var currentMusicDuration = 0L
@@ -61,12 +63,10 @@ class MediaPlayService : MediaBrowserServiceCompat() {
             currentMusicDuration = exoPlayer.duration
         }
 
-        val mediaPlaybackPreparer = MediaPlayerPlaybackPreparer() {
+        val mediaPlaybackPreparer = MediaPlayerPlaybackPreparer(repository = repository) {
             currentPlayingMusic = it
             preparePlayer(
-                repository.getAllMusicMetaData(),
-                it,
-                true
+                repository.getAllMusicMetaData(), it, repository.getAllMediaSource(), true
             )
         }
 
@@ -86,30 +86,37 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     }
 
     override fun onLoadChildren(
-        parentId: String,
-        result: Result<MutableList<MediaBrowserCompat.MediaItem>>
+        parentId: String, result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         Log.d("Tests", "onLoadChildren: $parentId")
         when (parentId) {
             MEDIA_ROOT_ID -> {
+                if (playListId != MEDIA_ROOT_ID) {
+                    setPlayBackPreparer(MEDIA_ROOT_ID)
+                }
                 val mediaItems = repository.getAllMediaItems()
                 result.sendResult(mediaItems)
                 if (!isPlayerInitialized && mediaItems.isNotEmpty()) {
                     preparePlayer(
                         repository.getAllMusicMetaData(),
                         repository.getAllMusicMetaData()[0],
+                        repository.getAllMediaSource(),
                         false
                     )
                     isPlayerInitialized = true
                 }
             }
             MEDIA_FAVORITES_ID -> {
+                if (playListId != MEDIA_FAVORITES_ID) {
+                    setPlayBackPreparer(MEDIA_FAVORITES_ID)
+                }
                 val mediaItems = repository.getFavoritesMediaItems()
                 result.sendResult(mediaItems)
                 if (!isPlayerInitialized && mediaItems.isNotEmpty()) {
                     preparePlayer(
-                        repository.getFavoritesMetaData(),
-                        repository.getAllMusicMetaData()[0],
+                        repository.getFavoritesMetadata(),
+                        repository.getFavoritesMetadata()[0],
+                        repository.getFavoritesMediaSource(),
                         false
                     )
                     isPlayerInitialized = true
@@ -118,10 +125,18 @@ class MediaPlayService : MediaBrowserServiceCompat() {
         }
     }
 
-    private inner class MediaQueueNavigator : TimelineQueueNavigator(mediaSession) {
-        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return repository.getAllMusicMetaData()[windowIndex].description
+    private fun setPlayBackPreparer(parentId: String) {
+        val mediaPlaybackPreparer = MediaPlayerPlaybackPreparer(parentId, repository) {
+            currentPlayingMusic = it
+            preparePlayer(
+                if (parentId == MEDIA_FAVORITES_ID) repository.getFavoritesMetadata() else repository.getAllMusicMetaData(),
+                it,
+                if (parentId == MEDIA_FAVORITES_ID) repository.getFavoritesMediaSource() else repository.getAllMediaSource(),
+                true
+            )
         }
+        mediaSessionConnector!!.setPlaybackPreparer(mediaPlaybackPreparer)
+        playListId = parentId
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -132,10 +147,15 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     private fun preparePlayer(
         musicList: List<MediaMetadataCompat>,
         musicToPlay: MediaMetadataCompat?,
+        mediaSource: MediaSource,
         play: Boolean
     ) {
         val currentMusicIndex = currentPlayingMusic?.let { musicList.indexOf(musicToPlay) } ?: 0
-        exoPlayer.setMediaSource(repository.getAllMediaSource())
+        /*Log.d("Tests", "musicList: $musicList")
+        Log.d("Tests", "firstItem: ${musicList[0]}")
+        Log.d("Tests", "musicToPlay: $musicToPlay")
+        Log.d("Tests", "indexToPlay: $currentMusicIndex")*/
+        exoPlayer.setMediaSource(mediaSource)
         exoPlayer.prepare()
         exoPlayer.seekTo(currentMusicIndex, 0L)
         exoPlayer.playWhenReady = play
@@ -146,6 +166,16 @@ class MediaPlayService : MediaBrowserServiceCompat() {
         mediaSession.release()
         exoPlayer.removeListener(mediaPlayerEventListener)
         exoPlayer.release()
+    }
+
+    private inner class MediaQueueNavigator : TimelineQueueNavigator(mediaSession) {
+        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
+            return when(playListId) {
+                MEDIA_FAVORITES_ID -> repository.getFavoritesMetadata()[windowIndex].description
+                else -> repository.getAllMusicMetaData()[windowIndex].description
+            }
+
+        }
     }
 
 }
