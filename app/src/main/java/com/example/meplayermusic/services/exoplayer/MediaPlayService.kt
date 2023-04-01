@@ -36,10 +36,12 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     private var currentPlayingMusic: MediaMetadataCompat? = null
     private lateinit var musicNotificationManager: MediaPlayerNotificationManager
     private lateinit var mediaPlayerEventListener: MediaPlayerEventListener
-    private var playListId: String = MEDIA_ROOT_ID
+
 
     companion object {
         var currentMusicDuration = 0L
+            private set
+        var playListId: String? = null
             private set
     }
 
@@ -126,6 +128,7 @@ class MediaPlayService : MediaBrowserServiceCompat() {
     }
 
     private fun setPlayBackPreparer(parentId: String) {
+        Log.d("Tests", "setPlayBackPreparer: $parentId")
         val mediaPlaybackPreparer = MediaPlayerPlaybackPreparer(parentId, repository) {
             currentPlayingMusic = it
             preparePlayer(

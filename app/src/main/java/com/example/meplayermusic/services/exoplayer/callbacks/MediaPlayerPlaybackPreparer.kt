@@ -39,9 +39,12 @@ class MediaPlayerPlaybackPreparer(
             MEDIA_FAVORITES_ID -> {
                 repository.getFavoritesMetadata().find { mediaId == it.description.mediaId }
             }
-            else -> repository.getAllMusicMetaData().find { mediaId == it.description.mediaId }
+            else -> null
         }
+
+        Log.d("Tests", "onPrepareFromMediaId: $parentId")
         Log.d("Tests", "onPrepareFromMediaId: ${itemToPlay?.description?.mediaId}")
+        Log.d("Tests", "onPrepareFromMediaId: ${repository.getAllMusicMetaData()}")
         playerPrepared(itemToPlay)
     }
 

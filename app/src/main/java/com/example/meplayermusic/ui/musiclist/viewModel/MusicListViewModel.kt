@@ -1,13 +1,11 @@
 package com.example.meplayermusic.ui.musiclist.viewModel
 
-import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
-import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.meplayermusic.extensions.toMusic
+import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Resource
 import com.example.meplayermusic.repository.MusicRepository
@@ -24,17 +22,14 @@ class MusicListViewModel(
 
     fun update(favorites: List<Music>) {
         repository.updateFavorites(favorites)
-        repository.getAllMusicMetaData().mapNotNull { it.toMusic() }.also { musicList ->
-            for (music in musicList) {
-                if (favorites.find { it == music } != null) {
-                    music.isFavorite = true
-                }
-            }
-            _musics.value = Resource.success(musicList)
-        }
+        getAll()
     }
 
-    fun searchByName(query: String, parentId: String): List<Music> = when(parentId) {
+    suspend fun getAllFavorites() {
+        repository.getAllFavorites().also { update(it) }
+    }
+
+    fun searchByName(query: String, parentId: String): List<Music> = when (parentId) {
         MEDIA_ROOT_ID -> musics.value?.data?.filter { music ->
             music.title.contains(query, true)
         } ?: emptyList()
@@ -80,9 +75,8 @@ class MusicListViewModel(
 
     fun getAll() {
         _musics.postValue(Resource.success(null))
-        repository.getAllMusicMetaData().mapNotNull { it.toMusic() }.also { musicList ->
-            Log.d("Tests", "getAll: ${musicList.filter { it.isFavorite }}")
-            _musics.postValue(Resource.success(musicList))
+        repository.getAllMusics().also {
+            _musics.postValue(Resource.success(it))
         }
     }
 }

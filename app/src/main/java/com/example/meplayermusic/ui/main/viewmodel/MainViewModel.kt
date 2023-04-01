@@ -8,13 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
+import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.extensions.currentPlaybackPosition
 import com.example.meplayermusic.extensions.isPlayEnabled
 import com.example.meplayermusic.extensions.isPlaying
 import com.example.meplayermusic.extensions.isPrepared
 import com.example.meplayermusic.model.Music
 import com.example.meplayermusic.other.Resource
-import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.repository.MusicRepository
 import com.example.meplayermusic.services.exoplayer.MediaPlayService
 import com.example.meplayermusic.services.exoplayer.callbacks.MusicServiceConnection
@@ -26,8 +26,6 @@ class MainViewModel(
     private val repository: MusicRepository
 
 ) : ViewModel() {
-
-    private val subscription = MutableLiveData(MEDIA_ROOT_ID)
 
     private val _mediaItems = MutableLiveData<Resource<List<Music>>>()
     internal val mediaItems: LiveData<Resource<List<Music>>> = _mediaItems
@@ -41,6 +39,8 @@ class MainViewModel(
     private val _currentMusicDuration = MutableLiveData<Long?>()
     internal val currentMusicDuration: LiveData<Long?> = _currentMusicDuration
 
+    private var subscription: String = ""
+
     fun fetchData(context: Context) {
         repository.fetchData(context)
     }
@@ -48,6 +48,9 @@ class MainViewModel(
     init {
         updateCurrentlyMusicPosition()
     }
+
+    fun getCurrentlySubscription(): String = subscription
+
     private fun updateCurrentlyMusicPosition() {
         viewModelScope.launch {
             while (true) {
@@ -61,7 +64,6 @@ class MainViewModel(
         }
     }
 
-    fun getCurrentlySubscription(): String? = subscription.value
 
     fun skipToNextMusic() {
         musicServiceConnection.transportControls.skipToNext()
@@ -72,9 +74,8 @@ class MainViewModel(
         checkSubscription(parentId) {
             if (music.id.isEmpty()) {
                 mediaItems.value?.data?.get(0)?.id?.let {
-                    Log.d("Tests", "playOrToggleMusic: ${music.id.isEmpty()}")
                     musicServiceConnection.transportControls.playFromMediaId(it, null)
-                    return@checkSubscription
+                    return@let
                 }
             }
             if (isPrepared && music.id == currentPlayingMusic.value?.description?.mediaId) {
@@ -91,28 +92,39 @@ class MainViewModel(
         }
     }
 
-    private fun checkSubscription(parentId: String, onSubscribed: () -> Unit) {
-        subscription.value!!.let {
-            if (it == parentId) {
-                onSubscribed()
-            } else {
-                musicServiceConnection.unsubscribe(it)
-                when(parentId) {
-                    MEDIA_ROOT_ID -> subscribe(MEDIA_ROOT_ID) {
-                        onSubscribed()
-                        subscription.value = MEDIA_ROOT_ID
-                    }
-                    MEDIA_FAVORITES_ID -> subscribe(MEDIA_FAVORITES_ID) {
-                        onSubscribed()
-                        subscription.value = MEDIA_FAVORITES_ID
-                    }
+    private fun checkSubscription(parentId: String, onChecked: () -> Unit) {
+        Log.d("Tests", "checkSubscription: $parentId")
+        Log.d("Tests", "checkSubscription: ${musicServiceConnection.getCurrentRoot()}")
+        when (parentId) {
+            musicServiceConnection.getCurrentRoot() -> {
+                onChecked()
+                return
+            }
+            MEDIA_ROOT_ID -> {
+                subscribe(MEDIA_ROOT_ID) {
+                    if (subscription.isNotEmpty()) musicServiceConnection.unsubscribe(subscription)
+                    onChecked()
                 }
-
+                return
+            }
+            MEDIA_FAVORITES_ID -> {
+                subscribe(MEDIA_FAVORITES_ID) {
+                    if (subscription.isNotEmpty()) musicServiceConnection.unsubscribe(subscription)
+                    onChecked()
+                }
+            }
+            else -> {
+                subscribe(MEDIA_ROOT_ID) {
+                    if (subscription.isNotEmpty()) musicServiceConnection.unsubscribe(subscription)
+                    onChecked()
+                }
+                return
             }
         }
     }
 
     private fun subscribe(parentId: String, onSubscribed: () -> Unit) {
+        Log.d("Tests", "subscribe: Entrou")
         _mediaItems.postValue(Resource.loading(null))
         musicServiceConnection.subscribe(
             parentId,
@@ -132,21 +144,16 @@ class MainViewModel(
                         )
                     }
                     _mediaItems.postValue(Resource.success(items))
+                    subscription = parentId
+                    onSubscribed()
                 }
             })
-        onSubscribed()
-    }
 
-    fun searchByName(query: String): List<Music> =
-        mediaItems.value?.data?.filter { music ->
-            music.title.contains(query, true)
-        } ?: emptyList()
+    }
 
 
     override fun onCleared() {
         super.onCleared()
-        musicServiceConnection.unsubscribe(
-            subscription.value ?: MEDIA_ROOT_ID
-        )
+        if (subscription.isNotEmpty()) musicServiceConnection.unsubscribe(subscription)
     }
 }

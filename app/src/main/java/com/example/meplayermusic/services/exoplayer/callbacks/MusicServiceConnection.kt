@@ -42,6 +42,7 @@ class MusicServiceConnection(context: Context) {
         mediaBrowser.subscribe(parentId, callback)
     }
 
+    fun getCurrentRoot() = if (isConnected.value?.data == true){ MediaPlayService.playListId } else {""}
     fun unsubscribe(parentId: String) {
         mediaBrowser.unsubscribe(parentId)
     }

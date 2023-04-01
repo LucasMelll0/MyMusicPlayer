@@ -7,10 +7,13 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.meplayermusic.R
 import com.example.meplayermusic.databinding.ActivityMainBinding
 import com.example.meplayermusic.other.Visibility
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
+import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -18,11 +21,18 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+    private val mainViewModel: MainViewModel by viewModel()
+    private val musicListViewModel: MusicListViewModel by viewModel()
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            viewModel.fetchData(this@MainActivity)
+            lifecycleScope.launch {
+                progressBarVisibility(Visibility.VISIBLE)
+                mainViewModel.fetchData(this@MainActivity)
+                musicListViewModel.getAllFavorites()
+                progressBarVisibility(Visibility.GONE)
+            }
         } else {
             Toast.makeText(
                 this@MainActivity,
@@ -31,15 +41,17 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
     }
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         checkExternalStoragePermission {
-            progressBarVisibility(Visibility.VISIBLE)
-            viewModel.fetchData(this@MainActivity)
-            progressBarVisibility(Visibility.GONE)
+            lifecycleScope.launch {
+                progressBarVisibility(Visibility.VISIBLE)
+                mainViewModel.fetchData(this@MainActivity)
+                musicListViewModel.getAllFavorites()
+                progressBarVisibility(Visibility.GONE)
+            }
         }
     }
 

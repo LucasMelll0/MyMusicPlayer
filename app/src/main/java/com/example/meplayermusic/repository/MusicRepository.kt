@@ -17,13 +17,23 @@ class MusicRepository(
     private val dataSourceFactory: DefaultDataSource.Factory,
     var updateFavorites: (List<Music>) -> Unit = {
         favorites = it.toMutableList()
+        updateAllMusics()
         favoritesToMetadata()
     }
 ) {
     companion object {
         private var favorites = mutableListOf<Music>()
         private var favoritesMetaData = mutableListOf<MediaMetadataCompat>()
+        private var allMusics = mutableListOf<Music>()
 
+        private fun updateAllMusics() {
+            allMusics = MusicDataSource.musicList
+            allMusics.forEach { music ->
+                if (favorites.find { it == music } != null) {
+                    music.isFavorite = true
+                }
+            }
+        }
 
         private fun favoritesToMetadata() {
             favoritesMetaData = favorites.map { music ->
@@ -31,6 +41,11 @@ class MusicRepository(
             }.toMutableList()
         }
     }
+
+
+
+    fun getAllMusics() = allMusics
+
 
     fun getFavoritesMetadata(): List<MediaMetadataCompat> {
         return favoritesMetaData.toList()
@@ -41,6 +56,8 @@ class MusicRepository(
     suspend fun removeFromFavorites(music: Music) = dao.remove(music)
 
     fun getFavoritesLiveData() = dao.getAllLiveData()
+
+    suspend fun getAllFavorites() = dao.getAll()
 
     fun getFavoritesMediaItems(): MutableList<MediaBrowserCompat.MediaItem> {
         return favorites.map { music ->
@@ -68,5 +85,4 @@ class MusicRepository(
 
     fun getAllMediaSource() = MusicDataSource.asMediaSource(dataSourceFactory)
 
-    fun getAllMusics() = MusicDataSource.musicList
 }

@@ -5,10 +5,10 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import coil.load
 import com.example.meplayermusic.R
-import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.databinding.FragmentMusicListBinding
 import com.example.meplayermusic.extensions.goTo
 import com.example.meplayermusic.extensions.isPlaying
@@ -55,7 +55,6 @@ class MusicListFragment : Fragment() {
     }
 
 
-
     override fun onStart() {
         super.onStart()
         setsUpTransportControllers()
@@ -67,14 +66,23 @@ class MusicListFragment : Fragment() {
             val adapter = ViewPagerAdapter(it)
             binding.apply {
                 viewpagerMusicList.adapter = adapter
-                adapter.addFragment(AllMusicsFragment(), getString(R.string.common_all))
-                adapter.addFragment(FavoritesFragment(), getString(R.string.common_favorites))
+                adapter.addFragment(
+                    AllMusicsFragment(),
+                    getString(R.string.common_all),
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_note, null)!!
+                )
+                adapter.addFragment(
+                    FavoritesFragment(),
+                    getString(R.string.common_favorites),
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_fav_checked, null)!!
+                )
                 viewpagerMusicList.offscreenPageLimit = adapter.itemCount
                 val mediator = TabLayoutMediator(
                     tablayoutMusicList,
                     viewpagerMusicList
                 ) { tab: TabLayout.Tab, position: Int ->
                     tab.text = adapter.getTitle(position)
+                    tab.icon = adapter.getIcon(position)
                 }
                 mediator.attach()
             }
@@ -87,7 +95,7 @@ class MusicListFragment : Fragment() {
         buttonPlayPause.setOnClickListener {
             currentMusic?.let { music ->
                 val currentlySubscription = viewModel.getCurrentlySubscription()
-                viewModel.playOrToggleMusic(music, true, currentlySubscription ?: MEDIA_ROOT_ID)
+                viewModel.playOrToggleMusic(music, true, currentlySubscription)
             }
         }
         buttonForward.setOnClickListener {
