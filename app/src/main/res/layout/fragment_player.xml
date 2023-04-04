@@ -62,14 +62,15 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/default_horizontal_margin"
         android:contentDescription="@string/fragment_player_slider_description"
+        android:valueFrom="0"
         app:layout_constraintBottom_toTopOf="@id/fab_play_pause_player_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_music_artist_player_fragment"
-        app:layout_constraintVertical_bias="0.7"
-        android:valueFrom="0"
+        app:layout_constraintVertical_bias="0.9"
         app:thumbColor="@color/purple_900"
-        app:trackColorActive="@color/purple_900" />
+        app:trackColorActive="@color/purple_900"
+        />
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textview_music_position_player_fragment"
         style="@style/InformationTextView"

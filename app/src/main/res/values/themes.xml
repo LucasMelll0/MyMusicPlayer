@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.MePlayerMusic" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_400</item>
+        <item name="colorPrimary">@color/purple_900</item>
         <item name="colorPrimaryVariant">@color/purple_600</item>
         <item name="colorOnPrimary">@color/purple_50</item>
         <!-- Secondary brand color. -->
@@ -14,6 +14,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/baloo_bhai_2</item>
+        <item name="colorControlActivated">@color/purple_900</item>
     </style>
 
     <style name="Theme.MePlayerMusic.NoActionBar">

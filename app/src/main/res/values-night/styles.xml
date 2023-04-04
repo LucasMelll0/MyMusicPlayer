@@ -5,6 +5,7 @@
         <item name="cardCornerRadius">@dimen/default_radius</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="cardBackgroundColor">@color/purple_1000</item>
     </style>
     <style name="DefaultShapeableImageView" parent="ShapeAppearance.Material3.Corner.Large">
         <item name="android:scaleType">centerCrop</item>

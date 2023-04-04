@@ -48,8 +48,8 @@ class MusicListFragment : Fragment() {
 
 
     private fun setsUpNavigationToPlayerFragment() {
-        val textViewMusicTitle = binding.textviewMusicTitleMiniPlayerListFragment
-        textViewMusicTitle.setOnClickListener {
+        val cardViewMiniPlayer = binding.cardviewMiniPlayer
+        cardViewMiniPlayer.setOnClickListener {
             goTo(R.id.action_musicListFragment_to_PlayerFragment)
         }
     }

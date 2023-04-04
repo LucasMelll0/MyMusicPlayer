@@ -17,4 +17,7 @@
     <string name="common_search">Search</string>
     <string name="common_all">All</string>
     <string name="common_favorites">Favorites</string>
+    <string name="fragment_all_musics_searbar_content_description">Search bar for all music list</string>
+    <string name="fragment_favorites_searchbar_content_description">Search bar for favorites list</string>
+    <string name="common_searchview_query_hint">Search for a song…</string>
 </resources>

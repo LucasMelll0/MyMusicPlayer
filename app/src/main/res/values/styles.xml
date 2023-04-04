@@ -5,6 +5,7 @@
         <item name="cardCornerRadius">@dimen/default_radius</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="cardBackgroundColor">@color/purple_100</item>
     </style>
     <style name="DefaultShapeableImageView" parent="ShapeAppearance.Material3.Corner.Large">
         <item name="android:scaleType">centerCrop</item>
@@ -39,5 +40,14 @@
     <style name="DefaultIconButton" parent="Widget.Material3.Button.IconButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="DefaultSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="searchHintIcon">@null</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="queryHint">@string/common_searchview_query_hint</item>
+        <item name="iconifiedByDefault">true</item>
     </style>
 </resources>
