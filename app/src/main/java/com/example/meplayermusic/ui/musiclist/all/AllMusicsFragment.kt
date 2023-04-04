@@ -38,6 +38,17 @@ class AllMusicsFragment : Fragment() {
         setsUpRecyclerView()
     }
 
+    private fun setsUpSearchBar() {
+        val searchView = binding.searchviewSearchbar
+        val cardViewSearchBar = binding.cardviewSearchbarAllMusicsFragment
+        cardViewSearchBar.setOnClickListener {
+        if (searchView.isIconified) {
+            searchView.isIconified = false
+        }
+        }
+        setsUpSearchView(searchView)
+    }
+
     private fun setsUpSearchView(searchView: SearchView?) {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -64,6 +75,7 @@ class AllMusicsFragment : Fragment() {
         musicListViewModel.getAll()
         setsUpObservers()
         setsUpAdapterFunctions()
+        setsUpSearchBar()
     }
 
     private fun setsUpAdapterFunctions() {

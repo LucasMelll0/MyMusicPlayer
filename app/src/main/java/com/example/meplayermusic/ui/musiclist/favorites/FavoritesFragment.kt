@@ -41,6 +41,18 @@ class FavoritesFragment : Fragment() {
         super.onStart()
         setsUpAdapterFunctions()
         setsUpObserver()
+        setsUpSearchBar()
+    }
+
+    private fun setsUpSearchBar() {
+        val searchView = binding.searchviewSearchbar
+        val cardViewSearchBar = binding.cardviewSearchbarFavoritesFragment
+        cardViewSearchBar.setOnClickListener {
+            if (searchView.isIconified) {
+                searchView.isIconified = false
+            }
+        }
+        setsUpSearchView(searchView)
     }
 
     private fun setsUpSearchView(searchView: SearchView?) {
