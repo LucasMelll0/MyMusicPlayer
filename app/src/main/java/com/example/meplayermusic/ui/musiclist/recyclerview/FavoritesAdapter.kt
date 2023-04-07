@@ -11,11 +11,11 @@ class FavoritesAdapter(
         companion object {
             private val differCallBack = object : DiffUtil.ItemCallback<Music>() {
                 override fun areItemsTheSame(oldItem: Music, newItem: Music): Boolean {
-                    return oldItem == newItem
+                    return oldItem.uri == newItem.uri
                 }
 
                 override fun areContentsTheSame(oldItem: Music, newItem: Music): Boolean {
-                    return oldItem.uri == newItem.uri
+                    return oldItem == newItem
                 }
 
             }

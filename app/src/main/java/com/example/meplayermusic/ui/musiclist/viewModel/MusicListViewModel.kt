@@ -43,13 +43,7 @@ class MusicListViewModel(
     fun addToFavorites(music: Music) {
         viewModelScope.launch {
             favorites.value?.let { musicList ->
-                var found = false
-                for (item in musicList) {
-                    if (item == music) {
-                        found = true
-                    }
-                }
-                if (!found) {
+                musicList.firstOrNull { it == music } ?: run {
                     music.isFavorite = true
                     repository.addToFavorites(music)
                 }
@@ -60,21 +54,17 @@ class MusicListViewModel(
     fun removeFromFavorites(music: Music) {
         viewModelScope.launch {
             favorites.value?.let { musicList ->
-                var found = false
-                for (item in musicList) {
-                    if (item == music) {
-                        found = true
-                    }
-                }
-                if (found) {
+                musicList.firstOrNull { it == music }?.let {
                     repository.removeFromFavorites(music)
+                    getAllFavorites()
                 }
             }
+
         }
     }
 
     fun getAll() {
-        _musics.postValue(Resource.success(null))
+        _musics.postValue(Resource.loading(null))
         repository.getAllMusics().also {
             _musics.postValue(Resource.success(it))
         }

@@ -50,4 +50,16 @@
         <item name="queryHint">@string/common_searchview_query_hint</item>
         <item name="iconifiedByDefault">true</item>
     </style>
+    <style name="ShapeableImageView">
+        <item name="cornerSizeTopLeft">50%</item>
+        <item name="cornerSizeBottomRight">50%</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+    <style name="DefaultProgressBar">
+        <item name="android:layout_width">@dimen/progress_bar_size</item>
+        <item name="android:layout_height">@dimen/progress_bar_size</item>
+        <item name="android:elevation">@dimen/cardview_default_elevation</item>
+        <item name="android:progressTint">@color/purple_900</item>
+    </style>
 </resources>

@@ -20,4 +20,6 @@
     <string name="fragment_all_musics_searbar_content_description">Search bar for all music list</string>
     <string name="fragment_favorites_searchbar_content_description">Search bar for favorites list</string>
     <string name="common_searchview_query_hint">Search for a song…</string>
+    <string name="fragment_all_musics_empty_list_message">We can\'t find your songs, swipe to update</string>
+    <string name="fragment_favorites_empty_list_message">You don\'t have favorites yet. To add to favorites, click the heart button in front of the songs!</string>
 </resources>

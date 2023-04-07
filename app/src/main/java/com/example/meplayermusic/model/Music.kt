@@ -22,7 +22,10 @@ data class Music(
 ) {
 
     override fun equals(other: Any?): Boolean {
-        return this.uri == (other as Music).uri && this.title.equals(other.title, true)
+        return this.uri == (other as Music).uri && this.title.equals(
+            other.title,
+            true
+        )
     }
 
     override fun toString(): String {

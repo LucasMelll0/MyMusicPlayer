@@ -29,9 +29,9 @@ class MusicRepository(
         private fun updateAllMusics() {
             allMusics = MusicDataSource.musicList
             allMusics.forEach { music ->
-                if (favorites.find { it == music } != null) {
-                    music.isFavorite = true
-                }
+                music.isFavorite = favorites.firstOrNull { it == music }?.let {
+                    true
+                } ?: false
             }
         }
 

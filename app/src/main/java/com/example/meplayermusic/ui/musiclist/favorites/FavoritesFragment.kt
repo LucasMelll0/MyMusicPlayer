@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meplayermusic.constantes.MEDIA_FAVORITES_ID
 import com.example.meplayermusic.databinding.FragmentFavoritesBinding
+import com.example.meplayermusic.other.Visibility
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import com.example.meplayermusic.ui.musiclist.recyclerview.FavoritesAdapter
 import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
@@ -91,8 +92,24 @@ class FavoritesFragment : Fragment() {
 
     private fun setsUpObserver() {
         musicListViewModel.favorites.observe(this@FavoritesFragment) {
+            progressBarVisibility(Visibility.VISIBLE)
             adapter.submitList(it)
+            progressBarVisibility(Visibility.INVISIBLE)
+            if (it.isEmpty()) {
+                emptyListMessageVisibility(Visibility.VISIBLE)
+            }else {
+                emptyListMessageVisibility(Visibility.INVISIBLE)
+            }
+
         }
+    }
+
+    private fun progressBarVisibility(visibility: Visibility) {
+        binding.progressbarFavoritesFragment.visibility = visibility.state()
+    }
+
+    private fun emptyListMessageVisibility(visibility: Visibility) {
+        binding.emptyListMessageFavoritesFragment.visibility = visibility.state()
     }
 
     private fun setsUpRecyclerView() {

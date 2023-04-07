@@ -13,7 +13,7 @@ class PlayerViewModel(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
 
-    internal val currentPlayingMusic = musicServiceConnection.currentPlayingSong
+    private val currentPlayingMusic = musicServiceConnection.currentPlayingSong
     internal val playbackState = musicServiceConnection.playbackState
 
     private val _shuffleMode = MutableLiveData(false)

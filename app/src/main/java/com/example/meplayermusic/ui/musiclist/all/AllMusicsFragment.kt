@@ -1,6 +1,8 @@
 package com.example.meplayermusic.ui.musiclist.all
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.databinding.FragmentAllMusicsBinding
 import com.example.meplayermusic.other.Status
+import com.example.meplayermusic.other.Visibility
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import com.example.meplayermusic.ui.musiclist.recyclerview.AllMusicsAdapter
 import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
@@ -42,9 +45,9 @@ class AllMusicsFragment : Fragment() {
         val searchView = binding.searchviewSearchbar
         val cardViewSearchBar = binding.cardviewSearchbarAllMusicsFragment
         cardViewSearchBar.setOnClickListener {
-        if (searchView.isIconified) {
-            searchView.isIconified = false
-        }
+            if (searchView.isIconified) {
+                searchView.isIconified = false
+            }
         }
         setsUpSearchView(searchView)
     }
@@ -76,6 +79,18 @@ class AllMusicsFragment : Fragment() {
         setsUpObservers()
         setsUpAdapterFunctions()
         setsUpSearchBar()
+        setsUpSwipeRefresh()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setsUpSwipeRefresh() {
+        val swipeRefresh = binding.swipeRefreshAllMusicsFragment
+        swipeRefresh.setOnRefreshListener {
+            musicListViewModel.getAll()
+            Log.d("Tests", "setsUpSwipeRefresh: ${musicListViewModel.musics.value?.data?.size}")
+            adapter.notifyDataSetChanged()
+            swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun setsUpAdapterFunctions() {
@@ -91,22 +106,33 @@ class AllMusicsFragment : Fragment() {
         }
     }
 
-    private fun setsUpObservers() {
-        if (musicListViewModel.favorites.hasObservers()) musicListViewModel.favorites.removeObservers(
-            this
-        )
-        if (musicListViewModel.musics.hasObservers()) musicListViewModel.musics.removeObservers(this)
+    private fun emptyListMessageVisibility(visibility: Visibility) {
+        binding.emptyListMessageAllMusicsFragment.visibility = visibility.state()
+    }
 
-        musicListViewModel.musics.observe(this) {
-            it?.let { result ->
+    private fun progressBarVisibility(visibility: Visibility) {
+        binding.progressbarAllMusicsFragment.visibility = visibility.state()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setsUpObservers() {
+        musicListViewModel.musics.observe(this) { Resource ->
+            Resource?.let { result ->
+                emptyListMessageVisibility(Visibility.INVISIBLE)
+                progressBarVisibility(Visibility.INVISIBLE)
                 when (result.status) {
                     Status.SUCCESS -> {
                         result.data?.let { musicList ->
-                            adapter.submitList(musicList)
+                           adapter.submitList(musicList)
+                            adapter.notifyDataSetChanged()
                         }
                     }
-                    Status.ERROR -> Unit
-                    Status.LOADING -> Unit
+                    Status.ERROR -> {
+                        emptyListMessageVisibility(Visibility.VISIBLE)
+                    }
+                    Status.LOADING -> {
+                        progressBarVisibility(Visibility.VISIBLE)
+                    }
                 }
             }
         }
