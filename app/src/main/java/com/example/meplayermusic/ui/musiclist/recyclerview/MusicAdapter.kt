@@ -43,9 +43,8 @@ abstract class MusicAdapter(
                 onClick(music)
             }
             checkBoxFav.setOnClickListener {
-                if (it is AppCompatCheckBox) {
-                    onCheckBoxClick(music, it.isChecked)
-                }
+                if (it is AppCompatCheckBox) onCheckBoxClick(music, it.isChecked)
+
             }
         }
 

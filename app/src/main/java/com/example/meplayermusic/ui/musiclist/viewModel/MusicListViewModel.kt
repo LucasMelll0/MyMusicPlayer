@@ -55,7 +55,7 @@ class MusicListViewModel(
         viewModelScope.launch {
             favorites.value?.let { musicList ->
                 musicList.firstOrNull { it == music }?.let {
-                    repository.removeFromFavorites(music)
+                    repository.removeFromFavorites(it)
                     getAllFavorites()
                 }
             }

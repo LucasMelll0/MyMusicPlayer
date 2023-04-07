@@ -14,18 +14,13 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource
 
 class MusicRepository(
     private val dao: MusicDao,
-    private val dataSourceFactory: DefaultDataSource.Factory,
-    var updateFavorites: (List<Music>) -> Unit = {
-        favorites = it.toMutableList()
-        updateAllMusics()
-        favoritesToMetadata()
-    }
+    private val dataSourceFactory: DefaultDataSource.Factory
 ) {
+
     companion object {
         private var favorites = mutableListOf<Music>()
         private var favoritesMetaData = mutableListOf<MediaMetadataCompat>()
         private var allMusics = mutableListOf<Music>()
-
         private fun updateAllMusics() {
             allMusics = MusicDataSource.musicList
             allMusics.forEach { music ->
@@ -40,6 +35,13 @@ class MusicRepository(
                 music.toMediaMetadata()
             }.toMutableList()
         }
+
+    }
+
+    fun updateFavorites(favoritesUpdated: List<Music>) {
+        favorites = favoritesUpdated.toMutableList()
+        updateAllMusics()
+        favoritesToMetadata()
     }
 
 
