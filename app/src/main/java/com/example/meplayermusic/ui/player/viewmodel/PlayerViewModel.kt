@@ -16,11 +16,13 @@ class PlayerViewModel(
     private val currentPlayingMusic = musicServiceConnection.currentPlayingSong
     internal val playbackState = musicServiceConnection.playbackState
 
-    private val _shuffleMode = MutableLiveData(false)
-    internal val shuffleMode: LiveData<Boolean> = _shuffleMode
+    companion object {
+        private val shuffleModePrivate = MutableLiveData(false)
+        internal val shuffleMode: LiveData<Boolean> = shuffleModePrivate
 
-    private val _repeatMode = MutableLiveData(false)
-    internal val repeatMode: LiveData<Boolean> = _repeatMode
+        private val repeatModePrivate = MutableLiveData(false)
+        internal val repeatMode: LiveData<Boolean> = repeatModePrivate
+    }
 
     fun play() {
         val isPrepared = playbackState.value?.isPrepared ?: false
@@ -53,10 +55,10 @@ class PlayerViewModel(
         shuffleMode.value?.let {
             if (it) {
                 musicServiceConnection.transportControls.setShuffleMode(SHUFFLE_MODE_NONE)
-                _shuffleMode.postValue(false)
+                shuffleModePrivate.postValue(false)
             } else {
                 musicServiceConnection.transportControls.setShuffleMode(SHUFFLE_MODE_ALL)
-                _shuffleMode.postValue(true)
+                shuffleModePrivate.postValue(true)
             }
         }
     }
@@ -65,10 +67,10 @@ class PlayerViewModel(
         repeatMode.value?.let {
             if (it) {
                 musicServiceConnection.transportControls.setRepeatMode(REPEAT_MODE_NONE)
-                _repeatMode.postValue(false)
+                repeatModePrivate.postValue(false)
             } else {
                 musicServiceConnection.transportControls.setRepeatMode(REPEAT_MODE_ALL)
-                _repeatMode.postValue(true)
+                repeatModePrivate.postValue(true)
             }
         }
     }

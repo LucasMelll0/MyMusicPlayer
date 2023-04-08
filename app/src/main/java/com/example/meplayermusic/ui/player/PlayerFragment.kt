@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.meplayermusic.R
@@ -113,12 +112,12 @@ class PlayerFragment : Fragment() {
                 updateButtonPlayPause(it)
             }
         }
-        playerViewModel.shuffleMode.observe(this) {
+        PlayerViewModel.shuffleMode.observe(this) {
             setsUpShuffleButtonIcon(it)
             Log.d("Tests", "Shuffle: $it")
         }
 
-        playerViewModel.repeatMode.observe(this) {
+        PlayerViewModel.repeatMode.observe(this) {
             setsUpRepeatButtonIcon(it)
             Log.d("Tests", "Repeat: $it")
         }

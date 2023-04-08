@@ -41,6 +41,7 @@ class MainViewModel(
 
     private var subscription: String = ""
 
+
     fun fetchData(context: Context) {
         repository.fetchData(context)
     }
