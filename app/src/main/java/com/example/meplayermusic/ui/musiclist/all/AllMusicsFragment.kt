@@ -1,13 +1,12 @@
 package com.example.meplayermusic.ui.musiclist.all
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meplayermusic.constantes.MEDIA_ROOT_ID
 import com.example.meplayermusic.databinding.FragmentAllMusicsBinding
@@ -16,16 +15,17 @@ import com.example.meplayermusic.other.Visibility
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import com.example.meplayermusic.ui.musiclist.recyclerview.AllMusicsAdapter
 import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class AllMusicsFragment : Fragment() {
 
     private var _binding: FragmentAllMusicsBinding? = null
     private val binding get() = _binding!!
     private val adapter: AllMusicsAdapter by inject()
-    private val mainViewModel: MainViewModel by viewModel()
-    private val musicListViewModel: MusicListViewModel by viewModel()
+    private val mainViewModel: MainViewModel by activityViewModel()
+    private val musicListViewModel: MusicListViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,13 +82,12 @@ class AllMusicsFragment : Fragment() {
         setsUpSwipeRefresh()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun setsUpSwipeRefresh() {
         val swipeRefresh = binding.swipeRefreshAllMusicsFragment
         swipeRefresh.setOnRefreshListener {
-            musicListViewModel.getAll()
-            Log.d("Tests", "setsUpSwipeRefresh: ${musicListViewModel.musics.value?.data?.size}")
-            adapter.notifyDataSetChanged()
+            lifecycleScope.launch {
+                musicListViewModel.getAllFavorites()
+            }
             swipeRefresh.isRefreshing = false
         }
     }
@@ -114,7 +113,6 @@ class AllMusicsFragment : Fragment() {
         binding.progressbarAllMusicsFragment.visibility = visibility.state()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun setsUpObservers() {
         musicListViewModel.musics.observe(this) { Resource ->
             Resource?.let { result ->
@@ -123,8 +121,10 @@ class AllMusicsFragment : Fragment() {
                 when (result.status) {
                     Status.SUCCESS -> {
                         result.data?.let { musicList ->
-                           adapter.submitList(musicList)
-                            adapter.notifyDataSetChanged()
+                            adapter.submitList(musicList)
+                            if (musicList.isEmpty()) {
+                                emptyListMessageVisibility(Visibility.VISIBLE)
+                            }
                         }
                     }
                     Status.ERROR -> {
@@ -138,6 +138,11 @@ class AllMusicsFragment : Fragment() {
         }
         musicListViewModel.favorites.observe(this) {
             musicListViewModel.update(it)
+        }
+        musicListViewModel.lastRemoved.observe(this) {
+            it?.let {
+                adapter.notifyItemChanged(it)
+            }
         }
     }
 

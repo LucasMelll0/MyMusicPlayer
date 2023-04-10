@@ -44,10 +44,8 @@ abstract class MusicAdapter(
             }
             checkBoxFav.setOnClickListener {
                 if (it is AppCompatCheckBox) onCheckBoxClick(music, it.isChecked)
-
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {

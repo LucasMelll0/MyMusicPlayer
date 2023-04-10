@@ -71,7 +71,7 @@ val repositoryModule = module {
     single { MusicRepository(get(), get()) }
 }
 
-val allMusicsModule = module {
+val musicListModule = module {
     viewModel {
         MusicListViewModel(get())
     }
@@ -79,9 +79,6 @@ val allMusicsModule = module {
     single {
         AllMusicsAdapter()
     }
-}
-
-val favoritesModule = module {
     single {
         FavoritesAdapter()
     }

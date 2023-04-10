@@ -5,7 +5,7 @@ import com.example.meplayermusic.model.Music
 
 class AllMusicsAdapter(
     onClick: (music: Music) -> Unit = {},
-    onCheckBoxClick: (music: Music, isChecked: Boolean) -> Unit = { _,_ ->}
+    onCheckBoxClick: (music: Music, isChecked: Boolean) -> Unit = { _, _ -> }
 ) : MusicAdapter(onClick, onCheckBoxClick, differCallBack) {
 
     companion object {
@@ -15,7 +15,7 @@ class AllMusicsAdapter(
             }
 
             override fun areContentsTheSame(oldItem: Music, newItem: Music): Boolean {
-                return oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
+                return oldItem == newItem && oldItem.isFavorite != newItem.isFavorite
             }
         }
     }

@@ -22,14 +22,14 @@ import com.example.meplayermusic.ui.musiclist.favorites.FavoritesFragment
 import com.example.meplayermusic.ui.musiclist.viewpager.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
 class MusicListFragment : Fragment() {
 
     private var _binding: FragmentMusicListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by activityViewModel()
     private var currentMusic: Music? = null
     private var playbackState: PlaybackStateCompat? = null
 

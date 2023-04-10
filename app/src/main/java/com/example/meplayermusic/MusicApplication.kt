@@ -17,8 +17,7 @@ class MusicApplication : Application() {
                 playerModule,
                 roomModule,
                 repositoryModule,
-                allMusicsModule,
-                favoritesModule
+                musicListModule
             )
         }
     }

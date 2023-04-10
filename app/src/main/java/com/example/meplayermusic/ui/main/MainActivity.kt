@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 progressBarVisibility(Visibility.VISIBLE)
                 mainViewModel.fetchData(this@MainActivity)
-                musicListViewModel.getAllFavorites()
                 progressBarVisibility(Visibility.GONE)
             }
         } else {

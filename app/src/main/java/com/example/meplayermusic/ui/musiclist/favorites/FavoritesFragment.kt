@@ -14,15 +14,15 @@ import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import com.example.meplayermusic.ui.musiclist.recyclerview.FavoritesAdapter
 import com.example.meplayermusic.ui.musiclist.viewModel.MusicListViewModel
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
     private val adapter: FavoritesAdapter by inject()
-    private val musicListViewModel: MusicListViewModel by viewModel()
-    private val mainViewModel: MainViewModel by viewModel()
+    private val musicListViewModel: MusicListViewModel by activityViewModel()
+    private val mainViewModel: MainViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

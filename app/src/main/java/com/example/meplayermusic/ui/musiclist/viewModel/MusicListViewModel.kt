@@ -20,6 +20,9 @@ class MusicListViewModel(
 
     internal val favorites = repository.getFavoritesLiveData()
 
+    private val _lastRemoved: MutableLiveData<Int?> = MutableLiveData()
+    internal val lastRemoved: LiveData<Int?> = _lastRemoved
+
     fun update(favorites: List<Music>) {
         repository.updateFavorites(favorites)
         getAll()
@@ -54,9 +57,14 @@ class MusicListViewModel(
     fun removeFromFavorites(music: Music) {
         viewModelScope.launch {
             favorites.value?.let { musicList ->
-                musicList.firstOrNull { it == music }?.let {
-                    repository.removeFromFavorites(it)
+                musicList.firstOrNull { it == music }?.let { musicToRemove ->
+                    repository.removeFromFavorites(musicToRemove)
                     getAllFavorites()
+                    musics.value?.data?.let { allMusicList ->
+                        allMusicList.find { music == it }?.let {
+                            _lastRemoved.postValue(allMusicList.indexOf(it))
+                        }
+                    }
                 }
             }
 

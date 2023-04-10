@@ -14,6 +14,7 @@ import com.example.meplayermusic.databinding.FragmentPlayerBinding
 import com.example.meplayermusic.extensions.*
 import com.example.meplayermusic.ui.main.viewmodel.MainViewModel
 import com.example.meplayermusic.ui.player.viewmodel.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerFragment : Fragment() {
@@ -21,7 +22,7 @@ class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private val playerViewModel: PlayerViewModel by viewModel()
-    private val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel: MainViewModel by activityViewModel()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
