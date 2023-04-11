@@ -30,7 +30,7 @@
   - ViewBinding: Liga os componentes do XML no Kotlin através de uma classe que garante segurança de tipo e outras vantagens.
  - Room: Biblioteca para persistência de dados local.
   - Custom Views: View customizadas feitas do zero usando XML.
-  - [...]
+  - Navigation Component: Para navegação do app.
 
 - Arquitetura
   - MVVM (View - ViewModel - Model)
