@@ -59,14 +59,14 @@ class MainActivity : AppCompatActivity() {
         binding.imageviewProgressbarMainActivity.visibility = visibility.state()
     }
 
-    private fun checkExternalStoragePermission(onGranted: () -> Unit) {
+    private fun checkExternalStoragePermission(whenGranted: () -> Unit) {
         val permission = READ_EXTERNAL_STORAGE
         if (ContextCompat.checkSelfPermission(
                 this,
                 permission
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            onGranted()
+            whenGranted()
         } else {
             requestPermission.launch(permission)
         }
