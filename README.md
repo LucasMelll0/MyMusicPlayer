@@ -49,6 +49,6 @@
 <img width="100%" src="midia/architecture.png"/>
 <br>
 
-<a href="https://www.linkedin.com/posts/lucas-mello-a43887188_android-dev-services-activity-7051608775643832321--GHk/?utm_source=share&utm_medium=member_desktop">  Clique aqui para ver postagem demonstrando o app</a>
+<h2 align="center"><a href="https://www.linkedin.com/posts/lucas-mello-a43887188_android-dev-services-activity-7051608775643832321--GHk/?utm_source=share&utm_medium=member_desktop">  Clique aqui para ver postagem demonstrando o app</a></h2>
 
 
